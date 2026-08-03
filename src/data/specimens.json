@@ -2,9 +2,9 @@
   {
     "id": "1",
     "code": "SPECIMEN #DF-902",
-    "tabName": "실험체 #DF-902 (아렌스)",
-    "name": "아렌스 (ARENS)",
-    "race": "충인 / 실바나 독나비",
+    "tabName": "실험체 #DF-902 (SAMPLE)",
+    "name": "샘플 (SAMPLE)",
+    "race": "샘플벌래찡 / 실바나 독나비",
     "dept": "아르젠트 크레들",
     "condition": "흑발 / 금안 / 나비 날개",
     "feature": "감정 결여",
