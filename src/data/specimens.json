@@ -1,0 +1,47 @@
+[
+  {
+    "id": "1",
+    "code": "SPECIMEN #DF-902",
+    "tabName": "실험체 #DF-902 (아렌스)",
+    "name": "아렌스 (ARENS)",
+    "race": "충인 / 실바나 독나비",
+    "dept": "아르젠트 크레들",
+    "condition": "흑발 / 금안 / 나비 날개",
+    "feature": "감정 결여",
+    "status": "평민",
+    "opinion": "테스트 데이터입니다. 무서운 나비청년. 발각시 목 댕강 흑흑",
+    "avatarType": "elf",
+    "image": "arens_sample/arens_01.png",
+    "statusMsg": "SYSTEM ACTIVE // MONITORING"
+  },
+  {
+    "id": "2",
+    "code": "SPECIMEN #BS-041",
+    "tabName": "실험체 #BS-041 ({이름})",
+    "name": "{이름}",
+    "race": "{종족}",
+    "dept": "{관리부서}",
+    "condition": "{신체 조건}",
+    "feature": "{특징}",
+    "status": "{신분}",
+    "opinion": "{종합 의견}",
+    "avatarType": "beast",
+    "image": "",
+    "statusMsg": "SYSTEM ACTIVE // MONITORING"
+  },
+  {
+    "id": "3",
+    "code": "SPECIMEN #UG-007",
+    "tabName": "실험체 #UG-007 ({이름})",
+    "name": "{이름}",
+    "race": "{종족}",
+    "dept": "{관리부서}",
+    "condition": "{신체 조건}",
+    "feature": "{특징}",
+    "status": "{신분}",
+    "opinion": "{종합 의견}",
+    "avatarType": "dragon",
+    "image": "",
+    "statusMsg": "STATUS RED // TARGET WANTED"
+  }
+]

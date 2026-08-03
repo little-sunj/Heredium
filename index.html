@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>헤레디움(Heredium) 계획 - 제국 생체병기 관리 아카이브</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;900&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Noto+Serif+KR:wght@400;700&family=Orbitron:wght@600;900&display=swap" rel="stylesheet">
+    <!-- CSS 파일 연결 -->
+    <link rel="stylesheet" href="src/assets/css/index.css">
+</head>
+<body class="dystopian-theme">
+
+    <!-- 마도공학 백그라운드 노이즈/그리드 효과 -->
+    <div class="bg-scanline"></div>
+    <div class="bg-grid"></div>
+
+    <!-- 전역 GNB (네비게이션 + BGM 플레이어 통합) -->
+    <nav class="global-gnb glass-panel">
+        <div class="gnb-container">
+            <div class="gnb-logo">
+                <svg viewBox="0 0 100 100" class="gnb-logo-svg">
+                    <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <polygon points="50,15 80,75 20,75" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <line x1="50" y1="15" x2="50" y2="75" stroke="currentColor" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="10" fill="currentColor"/>
+                </svg>
+                <span class="logo-text">HEREDIUM</span>
+            </div>
+            
+            <ul class="gnb-links" id="gnb-links">
+                <li><a href="#worldview">세계관 개요</a></li>
+                <li><a href="#sectors">8대 부문</a></li>
+                <li><a href="#specimens">실험체 레지스트리</a></li>
+            </ul>
+            
+            <div class="gnb-right-wrapper">
+                <div class="gnb-player">
+                    <!-- 음표 아이콘 -->
+                    <span class="player-icon" id="player-icon" aria-hidden="true">♫</span>
+                    
+                    <!-- 곡 선택 토글버튼 및 드롭다운 -->
+                    <div class="player-selector">
+                        <button class="player-select-btn" id="player-track-name" title="곡 목록 열기">Loading BGM...</button>
+                        <ul class="player-dropdown" id="player-playlist">
+                            <!-- JS에서 동적으로 채워집니다 -->
+                        </ul>
+                    </div>
+                    
+                    <!-- 재생/일시정지 토글 버튼 (심플 아이콘) -->
+                    <button class="player-toggle-btn" id="player-play-btn" title="재생/일시정지">▶</button>
+                </div>
+
+                <!-- 모바일 햄버거 토글 버튼 -->
+                <button class="gnb-toggle-btn" id="gnb-toggle" aria-label="메뉴 토글">
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 1. Hero Section -->
+    <header class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-container">
+            <div class="imperial-emblem" id="emblem">
+                <svg viewBox="0 0 100 100" class="emblem-svg">
+                    <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <polygon points="50,15 80,75 20,75" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <line x1="50" y1="15" x2="50" y2="75" stroke="currentColor" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="10" fill="currentColor"/>
+                </svg>
+            </div>
+            <p class="hero-sub">PROJECT CODE: HEREDIUM</p>
+            <h1 class="hero-title" id="main-title">HEREDIUM</h1>
+            <div class="divider">
+                <span class="d-line"></span>
+                <span class="d-square"></span>
+                <span class="d-line"></span>
+            </div>
+            <p class="hero-slogan">"인류의 가장 위대한 진보, 가장 완전한 생명을 향하여."</p>
+            <p class="hero-warning">▲ 경고: 본 문서는 제국 총독부 기밀 등급 S-3에 해당하는 극비 아카이브입니다. 비인가자 열람 시 엄벌에 처함.</p>
+            
+            <div class="scroll-indicator">
+                <span class="scroll-text">SYSTEM INITIALIZATION</span>
+                <div class="mouse-icon">
+                    <div class="wheel"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 2. Worldview Section -->
+    <section class="section worldview-section" id="worldview">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">// STATUS_OVERVIEW</span>
+                <h2 class="section-title">제국의 진보와 이종족의 관리</h2>
+            </div>
+            <div class="worldview-layout">
+                <div class="worldview-card glass-panel fade-in">
+                    <div class="card-status">CLSSFIED_DOCUMENT #920-A</div>
+                    <h3>패권의 시대와 피지배의 역사</h3>
+                    <p>인간은 짧은 수명과 뛰어난 번식력, 그리고 눈부신 과학기술을 무기로 대륙의 패권을 차지했습니다. 엘프, 수인, 드워프, 용혈족 등 우수한 지체와 마법을 가졌던 다른 종족들은 제국의 압도적인 군사 기술 앞에 차례로 무릎을 꿇었습니다.</p>
+                    <p>전쟁 이후, 제국은 단순한 정복을 넘어 하나의 통합된 질서를 발표했습니다. 그것이 바로 <strong>『헤레디움 계획』</strong>입니다. 공존의 허울 뒤에 가려진 실체는 이종족들의 철저한 등급 분류와 통제, 그리고 지배였습니다.</p>
+                </div>
+                <div class="worldview-card glass-panel fade-in">
+                    <div class="card-status">PROJECT_OBJECTIVE</div>
+                    <h3>선별과 관리, 그리고 지배</h3>
+                    <p>헤레디움의 이름 아래 이종족들은 쓰임새에 따라 철저히 나뉩니다. 누군가는 전장의 영웅이자 군용 개체가 되고, 누군가는 차가운 실험대의 표본이 되며, 또 누군가는 이름조차 말살된 채 노동과 향락의 도구로 폐기됩니다.</p>
+                    <div class="motive-tags">
+                        <span>#우생학</span>
+                        <span>#계급사회</span>
+                        <span>#강제동화</span>
+                        <span>#마도공학</span>
+                        <span>#군국주의</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. The 8 Sectors Section -->
+    <section class="section sectors-section" id="sectors">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">// ADMINISTRATIVE_SECTORS</span>
+                <h2 class="section-title">헤레디움 산하 8대 부문</h2>
+            </div>
+            
+            <div class="sectors-grid" id="sectors-grid">
+                <!-- JS로 부서 리스트 동적 렌더링 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Sector Details Modal -->
+    <div class="modal" id="sector-modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content glass-panel">
+            <button class="close-btn" id="modal-close">&times;</button>
+            <div class="modal-header">
+                <span class="modal-dept-code" id="modal-dept-code">DEPT. STATUS</span>
+                <h3 class="modal-title" id="modal-sector-title">부문명</h3>
+            </div>
+            <div class="modal-body">
+                <div class="modal-info-grid">
+                    <div class="info-block">
+                        <h4>통제 목적</h4>
+                        <p id="modal-purpose">정보 로딩 중...</p>
+                    </div>
+                    <div class="info-block">
+                        <h4>주요 수용 대상</h4>
+                        <p id="modal-targets">정보 로딩 중...</p>
+                    </div>
+                </div>
+                <div class="modal-details">
+                    <h4>비공개 기밀 보고서</h4>
+                    <p class="typed-text" id="modal-description">보고서 요약 데이터 복구 중...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Specimen Archives Section -->
+    <section class="section specimen-section" id="specimens">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">// SUBJECTS_REGISTRY</span>
+                <h2 class="section-title">관리 대상 실험체 식별표</h2>
+                <p class="section-desc">제국 총독부 우생학 선별 관리국에서 관리하는 주요 이종족 개체 데이터베이스입니다.</p>
+            </div>
+
+            <div class="specimen-tabs" id="specimen-tabs">
+                <!-- JS로 탭 버튼 동적 렌더링 -->
+            </div>
+
+            <div class="specimen-display glass-panel" id="specimen-display">
+                <!-- JS로 실험체 세부 정보 동적 렌더링 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Timeline Section -->
+    <section class="section timeline-section" id="timeline">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">// SUBMISSION_TIMELINE</span>
+                <h2 class="section-title">합작 일정 및 연대기 (수정예정)</h2>
+                <p class="section-desc">헤레디움 프로젝트 합작의 기록 보관 계획 및 공개 타임라인입니다.</p>
+            </div>
+
+            <div class="timeline-wrapper">
+                <div class="timeline-line"></div>
+                
+                <div class="timeline-item fade-in">
+                    <div class="timeline-date">08 / 01</div>
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content glass-panel">
+                        <h3>세력 및 부서 관할 지정</h3>
+                        <p>헤레디움 계획 하에 관리되는 8대 부서 구역 설정 및 핵심 세력 가이드라인 기획 완료.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-date">08 / 08</div>
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content glass-panel">
+                        <h3>상세 기밀 문서 보관</h3>
+                        <p>각 행정 구역 상세 규칙 및 통제 대상 캐릭터 식별 정보 보강.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-date">08 / 27</div>
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content glass-panel">
+                        <h3>중간 배포 및 시스템 스캔</h3>
+                        <p>일반 인가 대상자를 위한 아카이브 시스템 구축 및 공개 포털 가오픈.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-date">08 / 31</div>
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content glass-panel highlighted">
+                        <h3>아카이브 전체 공개</h3>
+                        <p>헤레디움 합작 데이터의 전면 완전 개방 및 공식 오리엔테이션 사이트 오픈.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="dystopian-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>HEREDIUM ARCHIVE</h3>
+                    <p>인간 제국의 질서와 진보를 위한 공식 관리 기록 보관소.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>LINKS</h4>
+                    <ul>
+                        <li><a href="#worldview">세계관 개요</a></li>
+                        <li><a href="#sectors">8대 관할 부문</a></li>
+                        <li><a href="#specimens">실험체 레지스트리</a></li>
+                        <li><a href="#timeline">일정표</a></li>
+                    </ul>
+                </div>
+                <div class="footer-meta">
+                    <h4>SYSTEM META</h4>
+                    <p>STATUS: ONLINE</p>
+                    <p>ENCRYPTION: LEVEL 4 TRIPLE-DES</p>
+                    <p>© 2026 IMPERIAL GENERAL OFFICE. ALL RIGHTS CONTROLLED.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>※ 본 웹사이트는 디스토피아 창작물 《헤레디움》의 합작 홍보 목적의 허구적 공간입니다. 실제 단체나 사건과는 무관합니다.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS 파일 연결 -->
+    <script type="module" src="src/assets/js/index.js"></script>
+</body>
+</html>
