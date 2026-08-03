@@ -1145,13 +1145,36 @@ body {
         gap: 20px;
     }
     
+    /* 실험체 프로필 레이아웃 모바일 최적화 (겹침 및 깨짐 전면 해결) */
     .profile-layout {
         grid-template-columns: 1fr;
-        gap: 30px;
+        gap: 35px;
     }
     
     .hologram-viewport {
-        height: 300px;
+        height: auto; /* 고정 높이를 해제하여 하단 세부 내용과의 겹침 완전 방지 */
+        padding: 10px 0 20px 0;
+    }
+
+    .hologram-effect {
+        height: 280px; /* 모바일 전용 이미지 고정 높이 지정 */
+        flex-grow: 0;
+    }
+
+    /* 모바일 기기에서의 실험체 선택 탭 세로 정렬 및 터치 여백 최적화 */
+    .specimen-tabs {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .tab-btn {
+        width: 100%;
+        max-width: 340px; /* 모바일에서 과도하게 넓어지지 않도록 한계 부여 */
+        text-align: center;
+        padding: 12px 18px;
+        font-size: 0.8rem;
     }
     
     .specimen-stats {
