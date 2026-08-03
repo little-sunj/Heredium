@@ -146,7 +146,7 @@ function renderSectors(sectors) {
             
             if (data) {
                 modalDeptCode.textContent = `DEPT_REGISTRY // SECTOR_0${sectorNum}`;
-                modalTitle.textContent = data.title;
+                modalTitle.innerHTML = data.title.replace(' (', '<br>(');
                 modalPurpose.textContent = data.purpose;
                 modalTargets.textContent = data.targets;
                 
