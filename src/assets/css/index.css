@@ -258,6 +258,10 @@ body {
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
 }
 
+.mobile-br {
+    display: none;
+}
+
 .hero-warning {
     font-family: var(--font-body);
     font-size: 0.85rem;
@@ -1597,9 +1601,13 @@ body {
         margin-bottom: 15px;
     }
     .hero-slogan {
-        font-size: 1.15rem !important;
+        font-size: 1.1rem !important;
         margin-bottom: 30px;
-        line-height: 1.5;
+        line-height: 1.6;
+        word-break: keep-all;
+    }
+    .mobile-br {
+        display: inline;
     }
     .hero-warning {
         font-size: 0.72rem !important;
