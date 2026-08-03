@@ -982,7 +982,8 @@ body {
 .footer-brand p {
     color: var(--text-muted);
     font-weight: 300;
-    max-width: 350px;
+    max-width: 420px;
+    word-break: keep-all;
 }
 
 .footer-links h4, .footer-meta h4 {
@@ -1215,6 +1216,12 @@ body {
         grid-template-columns: 1fr;
         gap: 40px;
     }
+    .footer-brand p {
+        font-size: 0.85rem;
+        line-height: 1.5;
+        word-break: keep-all;
+        max-width: 100%;
+    }
 }
 
 /* ==========================================
@@ -1361,14 +1368,9 @@ body {
     gap: 12px;
     padding: 6px 12px;
     background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(224, 36, 36, 0.15);
     border-radius: 2px;
     transition: var(--transition-normal);
     position: relative; /* 드롭다운 정렬 앵커 */
-}
-
-.gnb-player.playing {
-    border-color: rgba(0, 240, 255, 0.2);
 }
 
 /* 음표 아이콘 */

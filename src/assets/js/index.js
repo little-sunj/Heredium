@@ -215,7 +215,6 @@ function renderSpecimens(specimens) {
                         <div class="hologram-effect">
                             <div class="holo-grid"></div>
                             ${avatarContent}
-                            <div class="holo-scanner"></div>
                         </div>
                         <div class="holo-status">${specimen.statusMsg}</div>
                     </div>
