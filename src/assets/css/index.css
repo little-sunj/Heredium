@@ -338,7 +338,6 @@ body {
 .worldview-card p {
     color: var(--text-muted);
     margin-bottom: 15px;
-    font-weight: 300;
 }
 
 .motive-tags {
@@ -416,7 +415,6 @@ body {
 .sector-summary {
     font-size: 0.9rem;
     color: var(--text-muted);
-    font-weight: 300;
     margin-bottom: 20px;
 }
 
@@ -583,7 +581,8 @@ body {
     background: rgba(15, 17, 21, 0.6);
     border: 1px solid var(--border-color);
     color: var(--text-muted);
-    font-family: var(--font-mono), var(--font-body);
+    font-family: var(--font-body);
+    font-weight: 500;
     font-size: 0.85rem;
     padding: 12px 24px;
     cursor: pointer;
@@ -850,7 +849,6 @@ body {
     font-size: 0.95rem;
     color: var(--text-muted);
     line-height: 1.7;
-    font-weight: 300;
 }
 
 /* 10. 타임라인(Timeline) 스타일 */
