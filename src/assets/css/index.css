@@ -498,6 +498,9 @@ body {
     position: relative;
     width: 90%;
     max-width: 650px;
+    max-height: 85vh; /* 모바일 기기 등을 고려해 화면 높이의 85%로 제한 */
+    display: flex;
+    flex-direction: column;
     z-index: 10001;
     transform: scale(0.9);
     transition: transform var(--transition-normal);
@@ -507,6 +510,29 @@ body {
 
 .modal.active .modal-content {
     transform: scale(1);
+}
+
+/* 모달 본문 영역 스크롤 활성화 */
+.modal-body {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    flex: 1;
+    padding-right: 5px; /* 스크롤바 영역과의 마진 확보 */
+}
+
+/* 모달 전용 슬림 스크롤바 커스텀 */
+.modal-body::-webkit-scrollbar {
+    width: 4px;
+}
+.modal-body::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+}
+.modal-body::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 2px;
+}
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background: var(--text-bright);
 }
 
 .close-btn {
@@ -524,6 +550,10 @@ body {
 .close-btn:hover {
     color: var(--text-bright);
     text-shadow: 0 0 8px var(--color-primary);
+}
+
+.modal-header {
+    padding-top: 25px; /* 닫기 버튼 아래로 타이틀 영역을 밀어서 겹침을 방지 */
 }
 
 .modal-dept-code {

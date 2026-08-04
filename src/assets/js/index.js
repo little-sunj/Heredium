@@ -106,7 +106,7 @@ function renderSectors(sectors) {
                 <div class="sector-num">${romanNum}</div>
                 <h3 class="sector-name">${sector.title.split(' (')[0]}</h3>
                 <p class="sector-summary">${sector.purpose}</p>
-                <span class="read-more">기밀 기록 열람</span>
+                <span class="read-more">기록 열람</span>
             </div>
         `;
         sectorsGrid.insertAdjacentHTML('beforeend', cardHTML);
