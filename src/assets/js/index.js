@@ -340,7 +340,6 @@ function initBgmPlayer() {
     function attemptAutoplay() {
         audio.play().then(() => {
             player.classList.add('playing');
-            playBtn.textContent = '⏸';
             // 자동 재생 성공 시 대기용 클릭 이벤트 제거
             document.removeEventListener('click', triggerPlayOnFirstClick);
         }).catch(err => {
@@ -359,14 +358,12 @@ function initBgmPlayer() {
         if (audio.paused) {
             audio.play().then(() => {
                 player.classList.add('playing');
-                playBtn.textContent = '⏸'; // 일시정지 기호
             }).catch(err => {
                 console.error("오디오 재생 실패 (브라우저 정책):", err);
             });
         } else {
             audio.pause();
             player.classList.remove('playing');
-            playBtn.textContent = '▶'; // 재생 기호
         }
     }
 
@@ -393,7 +390,6 @@ function initBgmPlayer() {
         // 강제 재생 작동
         audio.play().then(() => {
             player.classList.add('playing');
-            playBtn.textContent = '⏸';
         });
     });
 
@@ -421,7 +417,6 @@ function initBgmPlayer() {
         loadTrack(nextIndex);
         audio.play().then(() => {
             player.classList.add('playing');
-            playBtn.textContent = '⏸';
         });
     });
 }

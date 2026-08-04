@@ -39,7 +39,14 @@
             <div class="gnb-right-wrapper">
                 <div class="gnb-player">
                     <!-- 음표 아이콘 -->
-                    <span class="player-icon" id="player-icon" aria-hidden="true">♫</span>
+                    <span class="player-icon" id="player-icon" aria-hidden="true">
+                        <svg class="icon-music" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="14" cy="17" r="3" />
+                            <path d="M17 17V6h3v3" />
+                            <path d="M12 9 A 6 6 0 0 0 7 14" />
+                            <path d="M9 5 A 11 11 0 0 0 3 13" />
+                        </svg>
+                    </span>
                     
                     <!-- 곡 선택 토글버튼 및 드롭다운 -->
                     <div class="player-selector">
@@ -50,7 +57,15 @@
                     </div>
                     
                     <!-- 재생/일시정지 토글 버튼 (심플 아이콘) -->
-                    <button class="player-toggle-btn" id="player-play-btn" title="재생/일시정지">▶</button>
+                    <button class="player-toggle-btn" id="player-play-btn" title="재생/일시정지">
+                        <svg class="icon-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="miter">
+                            <polygon points="6,3 20,12 6,21" />
+                        </svg>
+                        <svg class="icon-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="miter">
+                            <rect x="5" y="3" width="4" height="18" />
+                            <rect x="15" y="3" width="4" height="18" />
+                        </svg>
+                    </button>
                 </div>
 
                 <!-- 모바일 햄버거 토글 버튼 -->
@@ -65,6 +80,11 @@
 
     <!-- 1. Hero Section -->
     <header class="hero-section">
+        <!-- 유튜브 배경 비디오 -->
+        <div class="hero-video-bg">
+            <iframe src="https://www.youtube.com/embed/m_y93jlgoA4?autoplay=1&mute=1&loop=1&playlist=m_y93jlgoA4&controls=0&showinfo=0&rel=0&playsinline=1&enablejsapi=1&iv_load_policy=3" 
+                    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
         <div class="hero-overlay"></div>
         <div class="hero-container">
             <div class="imperial-emblem" id="emblem">
