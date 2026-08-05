@@ -200,7 +200,7 @@ body {
     min-height: 100vh;
     min-width: 177.77vh;
     transform: translate(-50%, -50%) scale(1.15);
-    filter: blur(8px) brightness(0.65);
+    filter: blur(2px) brightness(0.75);
 }
 
 .hero-overlay {
@@ -232,8 +232,8 @@ body {
 
 .hero-sub {
     font-family: var(--font-mono);
-    font-size: 1rem;
-    letter-spacing: 6px;
+    font-size: 0.8rem;
+    letter-spacing: 4px;
     color: var(--color-primary);
     margin-bottom: 10px;
     text-shadow: 0 0 8px rgba(224, 36, 36, 0.5);
@@ -245,7 +245,7 @@ body {
     font-weight: 900;
     letter-spacing: 12px;
     color: var(--text-bright);
-    text-shadow: 0 0 25px rgba(224, 36, 36, 0.4);
+    text-shadow: 0 0 25px rgba(224, 36, 36, 0.7);
     margin-bottom: 20px;
 }
 
@@ -277,7 +277,7 @@ body {
     font-size: 1.8rem;
     font-weight: 500;
     letter-spacing: 1px;
-    color: var(--text-main);
+    color: #fff9c7;
     margin-bottom: 40px;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
 }
@@ -1420,7 +1420,6 @@ body {
     align-items: center;
     gap: 12px;
     padding: 6px 12px;
-    background: rgba(0, 0, 0, 0.4);
     border-radius: 2px;
     transition: var(--transition-normal);
     position: relative; /* 드롭다운 정렬 앵커 */
