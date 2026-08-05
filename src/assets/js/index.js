@@ -283,21 +283,29 @@ function initScrollObserver() {
     });
 }
 
-// 5. 황실 문장 및 타이틀 마우스 오버 글리치 효과
+// 5. 문장 및 타이틀 마우스 오버 글리치 효과
 function initEmblemGlitch() {
     const emblem = document.getElementById('emblem');
     const mainTitle = document.getElementById('main-title');
 
     if (emblem && mainTitle) {
-        emblem.addEventListener('mouseenter', () => {
+        const startGlitch = () => {
             emblem.style.filter = "drop-shadow(0 0 20px #e02424) hue-rotate(15deg)";
             mainTitle.style.textShadow = "3px 0 0 rgba(0,240,255,0.7), -3px 0 0 rgba(224,36,36,0.8)";
-        });
-        
-        emblem.addEventListener('mouseleave', () => {
+        };
+
+        const stopGlitch = () => {
             emblem.style.filter = "";
             mainTitle.style.textShadow = "";
-        });
+        };
+
+        // 문양 마우스 오버
+        emblem.addEventListener('mouseenter', startGlitch);
+        emblem.addEventListener('mouseleave', stopGlitch);
+
+        // 제목 마우스 오버
+        mainTitle.addEventListener('mouseenter', startGlitch);
+        mainTitle.addEventListener('mouseleave', stopGlitch);
     }
 }
 
