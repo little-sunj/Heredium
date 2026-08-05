@@ -1305,7 +1305,7 @@ body {
     border-right: none;
     border-bottom: 1px solid var(--border-color);
     background: rgba(7, 8, 10, 0.85);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 4px 20px rgba(143, 76, 76, 0.6);
     display: flex;
     align-items: center;
 }
