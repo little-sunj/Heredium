@@ -1728,3 +1728,15 @@ body {
 .timeline-section {
     display: none !important;
 }
+
+/* ==========================================
+   15. 커스텀 마우스 커서 (붉은색 레트로 스타일)
+   ========================================== */
+body, html {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='42' height='42' viewBox='0 0 32 32'><path d='M0,0 L0,17 L4.5,13 L8,20 L10.5,19 L7,12 L12,12 Z' fill='none' stroke='%23e02424' stroke-width='1.8' stroke-linejoin='miter'/></svg>") 0 0, auto;
+}
+
+/* 링크 및 버튼 요소 hover 시 손가락 커서 변경 */
+a, button, .interactive-card, [role="button"], .tab-btn, .close-btn, .player-select-btn, .gnb-toggle-btn, .read-more {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='42' height='42' viewBox='0 0 32 32'><path d='M10,2 C10,0.9 9.1,0 8,0 C6.9,0 6,0.9 6,2 L6,12 C6,12 5.5,11.5 5,11 C4,10 3,10 2,11 C1,12 1,13 2,14 L6,18 C8,20 10,22 13,22 C17,22 18,19 18,16 L18,8 C18,6.9 17.1,6 16,6 C14.9,6 14,6.9 14,8 L14,10 C14,8.9 13.1,8 12,8 C10.9,8 10,8.9 10,10 Z' fill='none' stroke='%23e02424' stroke-width='1.8' stroke-linejoin='miter'/></svg>") 11 0, pointer;
+}
