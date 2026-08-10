@@ -1,17 +1,23 @@
 [
   {
     "id": "1",
-    "code": "SPECIMEN #DF-902",
-    "tabName": "실험체 #DF-902 (SAMPLE)",
-    "name": "샘플 (SAMPLE)",
-    "race": "샘플벌래찡 / 실바나 독나비",
-    "dept": "아르젠트 크레들",
-    "condition": "흑발 / 금안 / 나비 날개",
-    "feature": "감정 결여",
-    "status": "평민",
-    "opinion": "테스트 데이터입니다. 무서운 나비청년. 발각시 목 댕강 흑흑",
-    "avatarType": "elf",
-    "image": "arens_sample/arens_01.png",
+    "code": "PRABHATA",
+    "tabName": "프라바타 (PRABHATA)",
+    "name": "프라바타 (PRABHATA)",
+    "race": "얼음 용혈족",
+    "dept": "발테리온 아레나",
+    "condition": "170cm / 짧고 짙은 남색 머리 / 푸른 눈",
+    "feature": "거침없고 강인함",
+    "status": "발테리온 베테랑 검투사",
+    "opinion": "어린 시절 제국의 아르젠트 크래들에서 굶주림을 못 이겨 빵을 훔치다 적발되었고, 그 벌로 발테리온 아레나로 끌려오며 쌍둥이 남동생 니샤와 강제로 이별하게 되었다. 처절하게 살아남아 아레나의 베테랑 검투사가 된 프라바타는, 반드시 아레나를 제패해 자유를 얻은 뒤 니샤의 행방을 추적하고자 한다.",
+    "avatarType": "dragon",
+    "image": "prabhata/prabhata_01.png",
+    "gallery": [
+      "prabhata/prabhata_01.png",
+      "prabhata/prabhata_02.png",
+      "prabhata/prabhata_03.png",
+      "prabhata/prabhata_04.png"
+    ],
     "statusMsg": "SYSTEM ACTIVE // MONITORING"
   },
   {
@@ -27,6 +33,7 @@
     "opinion": "{종합 의견}",
     "avatarType": "beast",
     "image": "",
+    "gallery": [],
     "statusMsg": "SYSTEM ACTIVE // MONITORING"
   },
   {
@@ -42,6 +49,7 @@
     "opinion": "{종합 의견}",
     "avatarType": "dragon",
     "image": "",
+    "gallery": [],
     "statusMsg": "STATUS RED // TARGET WANTED"
   }
 ]

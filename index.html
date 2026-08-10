@@ -210,53 +210,17 @@
         </div>
     </section>
 
-    <!-- 5. Timeline Section -->
-    <section class="section timeline-section" id="timeline">
+    <!-- 5. Gallery Section -->
+    <section class="section gallery-section" id="gallery">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">// SUBMISSION_TIMELINE</span>
-                <h2 class="section-title">합작 일정 및 연대기 (수정예정)</h2>
-                <p class="section-desc">헤레디움 프로젝트 합작의 기록 보관 계획 및 공개 타임라인입니다.</p>
+                <span class="section-tag">// SPECIMEN_MEDIA_GALLERY</span>
+                <h2 class="section-title">대상체 시각 기록 보관소</h2>
+                <p class="section-desc">선택된 관리 대상체로부터 획득된 시각 데이터 및 외형 스캔 자료입니다.</p>
             </div>
 
-            <div class="timeline-wrapper">
-                <div class="timeline-line"></div>
-                
-                <div class="timeline-item fade-in">
-                    <div class="timeline-date">08 / 01</div>
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content glass-panel">
-                        <h3>세력 및 부서 관할 지정</h3>
-                        <p>헤레디움 계획 하에 관리되는 8대 부서 구역 설정 및 핵심 세력 가이드라인 기획 완료.</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item fade-in">
-                    <div class="timeline-date">08 / 08</div>
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content glass-panel">
-                        <h3>상세 기밀 문서 보관</h3>
-                        <p>각 행정 구역 상세 규칙 및 통제 대상 캐릭터 식별 정보 보강.</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item fade-in">
-                    <div class="timeline-date">08 / 27</div>
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content glass-panel">
-                        <h3>중간 배포 및 시스템 스캔</h3>
-                        <p>일반 인가 대상자를 위한 아카이브 시스템 구축 및 공개 포털 가오픈.</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item fade-in">
-                    <div class="timeline-date">08 / 31</div>
-                    <div class="timeline-marker"></div>
-                    <div class="timeline-content glass-panel highlighted">
-                        <h3>아카이브 전체 공개</h3>
-                        <p>헤레디움 합작 데이터의 전면 완전 개방 및 공식 오리엔테이션 사이트 오픈.</p>
-                    </div>
-                </div>
+            <div class="gallery-wrapper" id="gallery-wrapper">
+                <!-- JS로 선택된 캐릭터의 갤러리 이미지 동적 렌더링 -->
             </div>
         </div>
     </section>
@@ -275,7 +239,7 @@
                         <li><a href="#worldview">세계관 개요</a></li>
                         <li><a href="#sectors">8대 관할 부문</a></li>
                         <li><a href="#specimens">실험체 레지스트리</a></li>
-                        <li><a href="#timeline">일정표</a></li>
+                        <li><a href="#gallery">시각 기록 보관소</a></li>
                     </ul>
                 </div>
                 <div class="footer-meta">
@@ -290,6 +254,24 @@
             </div>
         </div>
     </footer>
+
+    <!-- Gallery Image Lightbox Modal -->
+    <div class="modal" id="gallery-modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content gallery-modal-content glass-panel">
+            <button class="close-btn" id="gallery-modal-close">&times;</button>
+            <div class="gallery-modal-body">
+                <div class="gallery-modal-frame">
+                    <img src="" id="gallery-modal-img" alt="Hologram Scan">
+                </div>
+                <div class="gallery-modal-metadata">
+                    <span class="meta-tag">// SYSTEM_VISUAL_DECRYPTOR</span>
+                    <h4 id="gallery-modal-title">PRABHATA_01.PNG</h4>
+                    <p id="gallery-modal-desc">RESOLUTION: 1080x1350 // CAPTURED BY: CAMERA_BALTERION_08</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- JS 파일 연결 -->
     <script type="module" src="src/assets/js/index.js"></script>

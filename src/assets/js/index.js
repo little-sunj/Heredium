@@ -82,6 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
         initEmblemGlitch();
         initBgmPlayer();
         initGnbToggle();
+        initGalleryModal();
 
     } catch (error) {
         console.error("System Initialization Failed:", error);
@@ -263,7 +264,227 @@ function renderSpecimens(specimens) {
             if (targetProfile) {
                 targetProfile.classList.add('active');
             }
+            
+            // 갤러리 업데이트
+            updateGallery(tabId);
         });
+    });
+
+    // 초기 첫 번째 실험체의 갤러리 로드
+    if (specimens.length > 0) {
+        updateGallery(specimens[0].id);
+    }
+}
+
+// 3.5. 실험체 시각 기록 갤러리 업데이트 및 모달 연동
+function updateGallery(specimenId) {
+    const galleryWrapper = document.getElementById('gallery-wrapper');
+    if (!galleryWrapper) return;
+
+    // specimensData에서 해당 실험체 검색
+    const specimen = specimensData.find(s => s.id === String(specimenId));
+    if (!specimen) return;
+
+    galleryWrapper.innerHTML = "";
+
+    // 갤러리 이미지가 존재하는 경우
+    if (specimen.gallery && specimen.gallery.length > 0) {
+        let carouselHTML = `
+            <div class="gallery-carousel-container">
+                <button class="gallery-nav-btn prev-btn" id="gallery-prev" aria-label="이전 이미지">
+                    <svg viewBox="0 0 24 24" width="24" height="24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor"/></svg>
+                </button>
+                <div class="gallery-carousel-viewport">
+                    <div class="gallery-carousel-track" id="gallery-track">
+        `;
+        
+        specimen.gallery.forEach((imgRelPath, index) => {
+            const imgUrl = getAssetUrl(imgRelPath);
+            const numStr = String(index + 1).padStart(2, '0');
+            const baseName = imgRelPath.substring(imgRelPath.lastIndexOf('/') + 1);
+            const filename = baseName.substring(0, baseName.lastIndexOf('.')).toUpperCase();
+            
+            carouselHTML += `
+                <div class="gallery-item" data-img-url="${imgUrl}" data-img-name="${filename}" data-img-desc="SCAN_LOG_${numStr} // CAPTURED BY: CAMERA_${specimen.code}_${numStr}">
+                    <div class="gallery-item-corner tl"></div>
+                    <div class="gallery-item-corner tr"></div>
+                    <div class="gallery-item-corner bl"></div>
+                    <div class="gallery-item-corner br"></div>
+                    <div class="gallery-scan-line"></div>
+                    <div class="gallery-img-container">
+                        <img src="${imgUrl}" class="gallery-img" alt="${specimen.name} Scan ${numStr}">
+                    </div>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-tag">// PHOTO_SCAN_${numStr}</span>
+                        <h4 class="gallery-meta-title">${filename}</h4>
+                    </div>
+                </div>
+            `;
+        });
+        
+        carouselHTML += `
+                    </div>
+                </div>
+                <button class="gallery-nav-btn next-btn" id="gallery-next" aria-label="다음 이미지">
+                    <svg viewBox="0 0 24 24" width="24" height="24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" fill="currentColor"/></svg>
+                </button>
+            </div>
+        `;
+        galleryWrapper.innerHTML = carouselHTML;
+        
+        // 캐러셀 로직 가동
+        initCarouselLogic();
+    } else {
+        // 갤러리 이미지가 없는 경우 (디스토피아 터미널 경고창 노출)
+        galleryWrapper.innerHTML = `
+            <div class="no-gallery-msg">
+                <span class="warning-icon">▲</span>
+                <p><strong>[ ACCESS RESTRICTED // DECRYPTION FAILED ]</strong></p>
+                <p>대상 개체와 관련된 유효한 시각 보존 기록(MEDIA ARCHIVE)을 찾을 수 없습니다.</p>
+                <div class="sub-text">ERROR CODE: SEC_DATA_NULL_0x00A3 - SCAN FILES UNRECOVERABLE</div>
+            </div>
+        `;
+    }
+}
+
+// 캐러셀 슬라이드 동작 및 예외 처리 로직
+function initCarouselLogic() {
+    const track = document.getElementById('gallery-track');
+    const prevBtn = document.getElementById('gallery-prev');
+    const nextBtn = document.getElementById('gallery-next');
+    
+    if (!track || !prevBtn || !nextBtn) return;
+    
+    const items = track.querySelectorAll('.gallery-item');
+    const totalItems = items.length;
+    if (totalItems === 0) return;
+    
+    let currentIndex = 0;
+    
+    function getItemsPerPage() {
+        if (window.innerWidth > 1024) return 3;
+        if (window.innerWidth > 768) return 2;
+        return 1;
+    }
+    
+    let resizeTimer;
+    
+    function updateCarousel() {
+        const itemsPerPage = getItemsPerPage();
+        const maxIndex = Math.max(0, totalItems - itemsPerPage);
+        
+        // 현재 인덱스가 최대값보다 크면 재조정
+        if (currentIndex > maxIndex) {
+            currentIndex = maxIndex;
+        }
+        
+        // 첫 번째 이미지 너비 및 gap 값 추출
+        const itemWidth = items[0].getBoundingClientRect().width;
+        const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
+        
+        const shiftX = currentIndex * (itemWidth + gap);
+        track.style.transform = `translateX(-${shiftX}px)`;
+        
+        // 이전/다음 버튼 비활성화 클래스 토글
+        if (currentIndex === 0) {
+            prevBtn.classList.add('disabled');
+        } else {
+            prevBtn.classList.remove('disabled');
+        }
+        
+        if (currentIndex >= maxIndex) {
+            nextBtn.classList.add('disabled');
+        } else {
+            nextBtn.classList.remove('disabled');
+        }
+        
+        // 전체 아이템 개수가 한 화면 노출 개수보다 적으면 네비게이션 버튼 자체를 보이지 않음
+        if (totalItems <= itemsPerPage) {
+            prevBtn.style.opacity = '0';
+            prevBtn.style.pointerEvents = 'none';
+            nextBtn.style.opacity = '0';
+            nextBtn.style.pointerEvents = 'none';
+        } else {
+            prevBtn.style.opacity = '';
+            prevBtn.style.pointerEvents = '';
+            nextBtn.style.opacity = '';
+            nextBtn.style.pointerEvents = '';
+        }
+    }
+    
+    prevBtn.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateCarousel();
+        }
+    });
+    
+    nextBtn.addEventListener('click', () => {
+        const itemsPerPage = getItemsPerPage();
+        const maxIndex = Math.max(0, totalItems - itemsPerPage);
+        if (currentIndex < maxIndex) {
+            currentIndex++;
+            updateCarousel();
+        }
+    });
+    
+    // 윈도우 크기 변환 시 위치 자동 조정 (디바운싱 적용으로 성능 최적화)
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(updateCarousel, 100);
+    });
+    
+    // 초기 정렬 적용
+    updateCarousel();
+    
+    // 이미지 클릭 시 모달 연동 바인딩
+    bindGalleryItems();
+}
+
+// 갤러리 아이템 클릭 시 라이트박스 띄우기
+function bindGalleryItems() {
+    const modal = document.getElementById('gallery-modal');
+    const modalImg = document.getElementById('gallery-modal-img');
+    const modalTitle = document.getElementById('gallery-modal-title');
+    const modalDesc = document.getElementById('gallery-modal-desc');
+    
+    if (!modal || !modalImg || !modalTitle || !modalDesc) return;
+
+    document.querySelectorAll('.gallery-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const url = item.getAttribute('data-img-url');
+            const name = item.getAttribute('data-img-name');
+            const desc = item.getAttribute('data-img-desc');
+            
+            modalImg.src = url;
+            modalTitle.textContent = name;
+            modalDesc.textContent = desc;
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    });
+}
+
+// 갤러리 라이트박스 모달 닫기 이벤트 초기화
+function initGalleryModal() {
+    const modal = document.getElementById('gallery-modal');
+    const closeBtn = document.getElementById('gallery-modal-close');
+    
+    if (!modal || !closeBtn) return;
+
+    function closeGalleryModal() {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    closeBtn.addEventListener('click', closeGalleryModal);
+    modal.querySelector('.modal-overlay').addEventListener('click', closeGalleryModal);
+
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeGalleryModal();
+        }
     });
 }
 
