@@ -1461,6 +1461,7 @@ body {
 }
 
 .player-select-btn {
+    --player-max-width: 140px;
     background: none;
     border: none;
     font-family: var(--font-body);
@@ -1469,11 +1470,28 @@ body {
     color: var(--text-muted);
     cursor: pointer;
     padding: 0;
-    max-width: 140px;
+    max-width: var(--player-max-width);
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
     transition: var(--transition-fast);
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.player-select-btn:not(.has-marquee) {
+    text-overflow: ellipsis;
+}
+
+.player-select-btn .track-name-inner {
+    display: inline-block;
+    white-space: nowrap;
+    transition: transform 0.5s ease;
+}
+
+/* 마우스를 올렸거나, 재생 중이면서 marquee 대상일 때 애니메이션 실행 */
+.player-select-btn.has-marquee:hover .track-name-inner,
+.gnb-player.playing .player-select-btn.has-marquee .track-name-inner {
+    animation: marquee-scroll 8s linear infinite;
 }
 
 .player-select-btn:hover {
@@ -1483,6 +1501,24 @@ body {
 
 .gnb-player.playing .player-select-btn {
     color: var(--text-bright);
+}
+
+@keyframes marquee-scroll {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    10% {
+        transform: translate3d(0, 0, 0);
+    }
+    85% {
+        transform: translate3d(calc(-100% + var(--player-max-width)), 0, 0);
+    }
+    90% {
+        transform: translate3d(calc(-100% + var(--player-max-width)), 0, 0);
+    }
+    100% {
+        transform: translate3d(0, 0, 0);
+    }
 }
 
 /* 곡 선택 드롭다운 목록 */
@@ -1676,7 +1712,7 @@ body {
         gap: 8px;
     }
     .player-select-btn {
-        max-width: 90px;
+        --player-max-width: 90px;
     }
     .player-dropdown {
         right: -50px;

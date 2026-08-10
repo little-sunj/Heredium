@@ -34,8 +34,7 @@ const AVATAR_SVGS = {
     `
 };
 
-import bgm1 from '../sound/sample_1.mp3';
-import bgm2 from '../sound/sample_2.mp3';
+// BGM 파일들은 아래에서 import.meta.glob를 통해 동적으로 가져옵니다.
 import sectorsData from '../../data/sectors.json';
 import specimensData from '../../data/specimens.json';
 
@@ -61,11 +60,15 @@ function getAssetUrl(relativePath) {
     return new URL(`../images/${relativePath}`, import.meta.url).href;
 }
 
-// 1. BGM 플레이리스트 정의 (정적 하드코딩 문구 대신 동적으로 파일명 매핑)
-const BGM_PLAYLIST = [
-    { name: getTrackNameFromUrl(bgm1), url: bgm1 },
-    { name: getTrackNameFromUrl(bgm2), url: bgm2 }
-];
+// 1. BGM 플레이리스트 정의 (import.meta.glob를 사용하여 sound 폴더 내 모든 mp3 파일을 동적 로드)
+const bgmFiles = import.meta.glob('../sound/*.mp3', { eager: true });
+const BGM_PLAYLIST = Object.entries(bgmFiles).map(([path, module]) => {
+    const url = module.default;
+    return {
+        name: getTrackNameFromUrl(url),
+        url: url
+    };
+});
 
 // 2. 앱 초기화 (데이터 로딩 및 바인딩)
 document.addEventListener("DOMContentLoaded", () => {
@@ -332,8 +335,20 @@ function initBgmPlayer() {
         currentTrackIndex = index;
         const track = BGM_PLAYLIST[index];
         audio.src = track.url;
-        trackName.textContent = track.name;
+        trackName.innerHTML = `<span class="track-name-inner">${track.name}</span>`;
         trackName.title = track.name; // 마우스 오버 툴팁
+
+        // 렌더링 후 가로 길이를 비교하여 텍스트가 잘리는 경우에만 marquee 활성화 클래스 부여
+        setTimeout(() => {
+            const innerSpan = trackName.querySelector('.track-name-inner');
+            if (innerSpan) {
+                if (innerSpan.offsetWidth > trackName.clientWidth) {
+                    trackName.classList.add('has-marquee');
+                } else {
+                    trackName.classList.remove('has-marquee');
+                }
+            }
+        }, 50);
     }
 
     loadTrack(0);
