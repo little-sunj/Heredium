@@ -103,9 +103,12 @@ function renderSectors(sectors) {
     Object.keys(sectors).forEach(key => {
         const sector = sectors[key];
         const romanNum = ROMAN_NUMS[parseInt(key) - 1] || key;
+        const imgNum = String(key).padStart(2, '0');
+        const bgImgUrl = getAssetUrl(`sectors/${imgNum}.jpg`);
 
         const cardHTML = `
             <div class="sector-card glass-panel interactive-card fade-in" data-sector="${key}">
+                <div class="sector-card-bg" style="background-image: url('${bgImgUrl}');"></div>
                 <div class="sector-num">${romanNum}</div>
                 <h3 class="sector-name">${sector.title.split(' (')[0]}</h3>
                 <p class="sector-summary">${sector.purpose}</p>
