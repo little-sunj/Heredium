@@ -238,7 +238,7 @@ function renderSpecimens(specimens) {
                             <div class="stat-row"><span class="stat-label">신분:</span> <span class="stat-val">${specimen.status}</span></div>
                         </div>
                         <div class="specimen-summary">
-                            <h4>제국 공식 관리 의견서</h4>
+                            <h4>개체 상세 내용</h4>
                             <p>${specimen.opinion}</p>
                         </div>
                     </div>
