@@ -543,6 +543,18 @@ function initBgmPlayer() {
     const trackName = document.getElementById('player-track-name');
     const playlistDropdown = document.getElementById('player-playlist');
 
+    // 모달 관련 요소 취득
+    const playerIcon = document.getElementById('player-icon');
+    const musicModal = document.getElementById('music-modal');
+    const musicModalClose = document.getElementById('music-modal-close');
+    const modalContent = musicModal ? musicModal.querySelector('.music-modal-content') : null;
+    const modalTrackTitle = document.getElementById('modal-track-title');
+    const modalTrackStatus = document.getElementById('modal-track-status');
+    const modalPlayBtn = document.getElementById('modal-play-btn');
+    const modalPrevBtn = document.getElementById('modal-prev-btn');
+    const modalNextBtn = document.getElementById('modal-next-btn');
+    const modalPlaylist = document.getElementById('modal-playlist');
+
     if (!player || !playBtn || !trackName || !playlistDropdown) return;
 
     let currentTrackIndex = 0;
@@ -550,9 +562,28 @@ function initBgmPlayer() {
     audio.loop = false; // 자동 다음 곡 전환을 위해 loop false
 
     // 플레이리스트 드롭다운 목록 동적 생성
-    playlistDropdown.innerHTML = BGM_PLAYLIST.map((track, i) => `
+    const dropdownHtml = BGM_PLAYLIST.map((track, i) => `
         <li data-index="${i}" class="${i === 0 ? 'active' : ''}">${track.name}</li>
     `).join('');
+    playlistDropdown.innerHTML = dropdownHtml;
+
+    // 모달 내부 플레이리스트 목록 동적 생성
+    if (modalPlaylist) {
+        modalPlaylist.innerHTML = dropdownHtml;
+    }
+
+    // 재생 상태 및 UI 통합 관리 함수
+    function setPlayState(isPlaying) {
+        if (isPlaying) {
+            player.classList.add('playing');
+            if (modalContent) modalContent.classList.add('playing');
+            if (modalTrackStatus) modalTrackStatus.textContent = 'PLAYING';
+        } else {
+            player.classList.remove('playing');
+            if (modalContent) modalContent.classList.remove('playing');
+            if (modalTrackStatus) modalTrackStatus.textContent = 'PAUSED';
+        }
+    }
 
     // 초기 트랙 로드
     function loadTrack(index) {
@@ -561,6 +592,10 @@ function initBgmPlayer() {
         audio.src = track.url;
         trackName.innerHTML = `<span class="track-name-inner">${track.name}</span>`;
         trackName.title = track.name; // 마우스 오버 툴팁
+
+        if (modalTrackTitle) {
+            modalTrackTitle.textContent = track.name;
+        }
 
         // 렌더링 후 가로 길이를 비교하여 텍스트가 잘리는 경우에만 marquee 활성화 클래스 부여
         setTimeout(() => {
@@ -573,6 +608,16 @@ function initBgmPlayer() {
                 }
             }
         }, 50);
+
+        // 플레이리스트 UI 활성 클래스 동기화 (GNB 드롭다운 & 모달 리스트)
+        [playlistDropdown, modalPlaylist].forEach(list => {
+            if (list) {
+                list.querySelectorAll('li').forEach((item, idx) => {
+                    if (idx === index) item.classList.add('active');
+                    else item.classList.remove('active');
+                });
+            }
+        });
     }
 
     loadTrack(0);
@@ -586,7 +631,7 @@ function initBgmPlayer() {
 
     function attemptAutoplay() {
         audio.play().then(() => {
-            player.classList.add('playing');
+            setPlayState(true);
             // 자동 재생 성공 시 대기용 클릭 이벤트 제거
             document.removeEventListener('click', triggerPlayOnFirstClick);
         }).catch(err => {
@@ -604,13 +649,13 @@ function initBgmPlayer() {
     function togglePlay() {
         if (audio.paused) {
             audio.play().then(() => {
-                player.classList.add('playing');
+                setPlayState(true);
             }).catch(err => {
                 console.error("오디오 재생 실패 (브라우저 정책):", err);
             });
         } else {
             audio.pause();
-            player.classList.remove('playing');
+            setPlayState(false);
         }
     }
 
@@ -620,24 +665,23 @@ function initBgmPlayer() {
         playlistDropdown.classList.toggle('show');
     });
 
-    // 플레이리스트 항목 선택 시 곡 전환
+    // 트랙 전환 공통 함수 (전환 후 자동 재생)
+    function changeTrack(index) {
+        loadTrack(index);
+        audio.play().then(() => {
+            setPlayState(true);
+        }).catch(err => {
+            console.error("트랙 재생 전환 실패:", err);
+        });
+    }
+
+    // GNB 플레이리스트 항목 선택 시 곡 전환
     playlistDropdown.addEventListener('click', (e) => {
         const li = e.target.closest('li');
         if (!li) return;
-
         const index = parseInt(li.dataset.index);
-
-        // 드롭다운 내부 활성 클래스 업데이트
-        playlistDropdown.querySelectorAll('li').forEach(item => item.classList.remove('active'));
-        li.classList.add('active');
-
-        loadTrack(index);
         playlistDropdown.classList.remove('show');
-
-        // 강제 재생 작동
-        audio.play().then(() => {
-            player.classList.add('playing');
-        });
+        changeTrack(index);
     });
 
     // 외부 영역 클릭 시 드롭다운 자동으로 닫기
@@ -654,18 +698,70 @@ function initBgmPlayer() {
         if (nextIndex >= BGM_PLAYLIST.length) {
             nextIndex = 0;
         }
-
-        // 플레이리스트 UI 활성 클래스 동기화
-        playlistDropdown.querySelectorAll('li').forEach((item, idx) => {
-            if (idx === nextIndex) item.classList.add('active');
-            else item.classList.remove('active');
-        });
-
-        loadTrack(nextIndex);
-        audio.play().then(() => {
-            player.classList.add('playing');
-        });
+        changeTrack(nextIndex);
     });
+
+    // === [추가] 모달 제어 이벤트 바인딩 ===
+    
+    // 음표 아이콘 클릭 시 모달 열기
+    if (playerIcon && musicModal) {
+        playerIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            musicModal.classList.add('active');
+        });
+    }
+
+    // 모달 닫기
+    if (musicModalClose && musicModal) {
+        musicModalClose.addEventListener('click', () => {
+            musicModal.classList.remove('active');
+        });
+    }
+
+    // 모달 배경 클릭 시 닫기
+    const modalOverlay = musicModal ? musicModal.querySelector('.modal-overlay') : null;
+    if (modalOverlay && musicModal) {
+        modalOverlay.addEventListener('click', () => {
+            musicModal.classList.remove('active');
+        });
+    }
+
+    // 모달 내부 재생/일시정지
+    if (modalPlayBtn) {
+        modalPlayBtn.addEventListener('click', togglePlay);
+    }
+
+    // 모달 내부 이전 곡 버튼
+    if (modalPrevBtn) {
+        modalPrevBtn.addEventListener('click', () => {
+            let prevIndex = currentTrackIndex - 1;
+            if (prevIndex < 0) {
+                prevIndex = BGM_PLAYLIST.length - 1;
+            }
+            changeTrack(prevIndex);
+        });
+    }
+
+    // 모달 내부 다음 곡 버튼
+    if (modalNextBtn) {
+        modalNextBtn.addEventListener('click', () => {
+            let nextIndex = currentTrackIndex + 1;
+            if (nextIndex >= BGM_PLAYLIST.length) {
+                nextIndex = 0;
+            }
+            changeTrack(nextIndex);
+        });
+    }
+
+    // 모달 내부 플레이리스트 곡 선택
+    if (modalPlaylist) {
+        modalPlaylist.addEventListener('click', (e) => {
+            const li = e.target.closest('li');
+            if (!li) return;
+            const index = parseInt(li.dataset.index);
+            changeTrack(index);
+        });
+    }
 }
 
 // 7. 모바일 GNB 햄버거 토글 메뉴 바인딩

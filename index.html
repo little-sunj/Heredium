@@ -273,6 +273,81 @@
         </div>
     </div>
 
+    <!-- Music Player Modal -->
+    <div class="modal" id="music-modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content music-modal-content glass-panel">
+            <button class="close-btn" id="music-modal-close">&times;</button>
+            <div class="music-modal-body">
+                <!-- CD/Vinyl 영역 -->
+                <div class="cd-section">
+                    <div class="cd-player">
+                        <!-- CD 회전체 -->
+                        <div class="cd-case">
+                            <div class="cd-disc" id="modal-cd-disc">
+                                <div class="cd-center-label">
+                                    <div class="cd-cover-art" id="modal-cd-cover">
+                                        <svg class="cd-cover-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                            <path d="M9 18V5l12-2v13"></path>
+                                            <circle cx="6" cy="18" r="3"></circle>
+                                            <circle cx="18" cy="16" r="3"></circle>
+                                        </svg>
+                                    </div>
+                                    <div class="cd-center-hole"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 정보 및 플레이리스트 영역 -->
+                <div class="music-info-section">
+                    <div class="music-track-info">
+                        <span class="meta-tag">// SYSTEM_BGM_DECRYPTOR</span>
+                        <h3 class="modal-track-title" id="modal-track-title">Loading track info...</h3>
+                        <div class="modal-track-status-wrapper">
+                            <span class="status-indicator" id="modal-status-indicator"></span>
+                            <span class="modal-track-status" id="modal-track-status">OFFLINE</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 내부 컨트롤러 -->
+                    <div class="modal-controls">
+                        <button class="control-btn" id="modal-prev-btn" title="이전 곡">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="19,20 9,12 19,4" fill="currentColor"/>
+                                <line x1="5" y1="19" x2="5" y2="5" stroke-width="3"/>
+                            </svg>
+                        </button>
+                        <button class="control-btn play-btn" id="modal-play-btn" title="재생/일시정지">
+                            <svg class="icon-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="5,3 19,12 5,21" fill="currentColor"/>
+                            </svg>
+                            <svg class="icon-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="5" y="3" width="4" height="18" fill="currentColor"/>
+                                <rect x="15" y="3" width="4" height="18" fill="currentColor"/>
+                            </svg>
+                        </button>
+                        <button class="control-btn" id="modal-next-btn" title="다음 곡">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="5,4 15,12 5,20" fill="currentColor"/>
+                                <line x1="19" y1="5" x2="19" y2="19" stroke-width="3"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- 플레이리스트 -->
+                    <div class="modal-playlist-container">
+                        <span class="meta-tag">// SYSTEM_PLAYLIST</span>
+                        <ul class="modal-playlist" id="modal-playlist">
+                            <!-- JS에서 동적으로 채워집니다 -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- JS 파일 연결 -->
     <script type="module" src="src/assets/js/index.js"></script>
 </body>
