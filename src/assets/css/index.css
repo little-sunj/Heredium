@@ -660,7 +660,7 @@ body {
     min-height: 80px;
 }
 
-/* 9. 실험체 아카이브(Specimen Archives) 스타일 */
+/* 9. 개체 아카이브(Specimen Archives) 스타일 */
 .specimen-tabs {
     display: flex;
     justify-content: center;
@@ -1249,7 +1249,7 @@ body {
         gap: 20px;
     }
     
-    /* 실험체 프로필 레이아웃 모바일 최적화 (겹침 및 깨짐 전면 해결) */
+    /* 개체 프로필 레이아웃 모바일 최적화 (겹침 및 깨짐 전면 해결) */
     .profile-layout {
         grid-template-columns: 1fr;
         gap: 35px;
@@ -1265,7 +1265,7 @@ body {
         flex-grow: 0;
     }
 
-    /* 모바일 기기에서의 실험체 선택 탭 세로 정렬 및 터치 여백 최적화 */
+    /* 모바일 기기에서의 개체 선택 탭 세로 정렬 및 터치 여백 최적화 */
     .specimen-tabs {
         flex-direction: column;
         width: 100%;
@@ -1796,7 +1796,7 @@ body {
 }
 
 /* ==========================================
-   16. 실험체 시각 기록 보관소 (Gallery & Lightbox) 스타일
+   16. 개체 시각 기록 보관소 (Gallery & Lightbox) 스타일
    ========================================== */
 .gallery-section {
     position: relative;

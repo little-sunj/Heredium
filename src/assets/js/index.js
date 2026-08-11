@@ -181,7 +181,7 @@ function renderSectors(sectors) {
     });
 }
 
-// 3. 실험체 아카이브(Specimen) 동적 렌더링 및 탭 전환 바인딩
+// 3. 개체 아카이브(Specimen) 동적 렌더링 및 탭 전환 바인딩
 function renderSpecimens(specimens) {
     const tabContainer = document.getElementById('specimen-tabs');
     const displayContainer = document.getElementById('specimen-display');
@@ -270,18 +270,18 @@ function renderSpecimens(specimens) {
         });
     });
 
-    // 초기 첫 번째 실험체의 갤러리 로드
+    // 초기 첫 번째 개체의 갤러리 로드
     if (specimens.length > 0) {
         updateGallery(specimens[0].id);
     }
 }
 
-// 3.5. 실험체 시각 기록 갤러리 업데이트 및 모달 연동
+// 3.5. 개체 시각 기록 갤러리 업데이트 및 모달 연동
 function updateGallery(specimenId) {
     const galleryWrapper = document.getElementById('gallery-wrapper');
     if (!galleryWrapper) return;
 
-    // specimensData에서 해당 실험체 검색
+    // specimensData에서 해당 개체 검색
     const specimen = specimensData.find(s => s.id === String(specimenId));
     if (!specimen) return;
 
