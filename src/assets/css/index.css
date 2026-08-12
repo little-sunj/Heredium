@@ -807,16 +807,12 @@ body {
 .holo-status {
     position: relative;
     bottom: auto;
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-family: 'Orbitron', 'Noto Sans KR', sans-serif;
+    font-size: 0.8rem;
     letter-spacing: 2px;
-    color: var(--text-muted);
+    color: #ef4444;
     margin-top: 15px;
     z-index: 4;
-}
-
-#specimen-3 .holo-status {
-    color: #ef4444;
     animation: warnFlash 1s infinite alternate;
 }
 
