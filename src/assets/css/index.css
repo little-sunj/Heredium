@@ -819,9 +819,56 @@ body {
 }
 
 .specimen-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     padding-bottom: 20px;
     margin-bottom: 20px;
+}
+
+.header-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.header-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.specimen-author {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+}
+
+.specimen-author .author-name {
+    color: var(--text-bright);
+    font-weight: 600;
+}
+
+.char-link-btn {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-primary);
+    text-decoration: none;
+    padding: 6px 12px;
+    border: 1px solid rgba(224, 36, 36, 0.3);
+    background: rgba(224, 36, 36, 0.05);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+}
+
+.char-link-btn:hover {
+    background: var(--color-primary);
+    color: var(--bg-darker);
+    box-shadow: var(--shadow-neon-red);
+    border-color: var(--color-primary);
 }
 
 .specimen-number {
@@ -890,8 +937,8 @@ body {
 }
 
 .specimen-summary h4 {
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
+    font-family: var(--font-serif);
+    font-size: 1rem;
     color: var(--text-bright);
     margin-bottom: 10px;
     letter-spacing: 1px;
@@ -1240,6 +1287,22 @@ body {
         text-align: center;
         padding: 12px 18px;
         font-size: 0.8rem;
+    }
+    
+    .specimen-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .header-right {
+        align-items: flex-start;
+        width: 100%;
+    }
+    
+    .char-link-btn {
+        width: 100%;
+        text-align: center;
     }
     
     .specimen-stats {

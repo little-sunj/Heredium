@@ -227,9 +227,15 @@ function renderSpecimens(specimens) {
                     </div>
                     <div class="specimen-details">
                         <div class="specimen-header">
-                            <span class="specimen-number">${specimen.code}</span>
-                            <h3 class="specimen-name">이름 : ${specimen.name}</h3>
-                            <span class="specimen-race">종족 : ${specimen.race}</span>
+                            <div class="header-left">
+                                <span class="specimen-number">${specimen.code}</span>
+                                <h3 class="specimen-name">${specimen.name}</h3>
+                                <span class="specimen-race">종족 : ${specimen.race}</span>
+                            </div>
+                            <div class="header-right">
+                                ${specimen.author ? `<div class="specimen-author">BY. <span class="author-name">${specimen.author}</span></div>` : ''}
+                                ${specimen.characterLink ? `<a href="${specimen.characterLink}" target="_blank" rel="noopener noreferrer" class="char-link-btn">CHARACTER LINK ➜</a>` : ''}
+                            </div>
                         </div>
                         <div class="specimen-stats">
                             <div class="stat-row"><span class="stat-label">관리 부서:</span> <span class="stat-val">${specimen.dept}</span></div>
