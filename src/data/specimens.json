@@ -66,8 +66,8 @@
   {
     "id": "4",
     "code": "영문이름",
-    "tabName": "이름 (name)",
-    "name": "{이름}",
+    "tabName": "세르베인 (name)",
+    "name": "세르베인",
     "race": "{종족}",
     "dept": "{관리부서}",
     "condition": "{신체 조건}",
