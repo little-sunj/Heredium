@@ -42,8 +42,29 @@
   },
   {
     "id": "3",
-    "code": "SPECIMEN #UG-007",
-    "tabName": "실험체 #UG-007 ({이름})",
+    "code": "NISHA",
+    "tabName": "니샤 (NISHA)",
+    "name": "니샤 (NISHA)",
+    "race": "얼음 용혈족",
+    "dept": "아르젠트 크래들",
+    "condition": "189cm / 짙은 남색 머리 / 푸른 눈",
+    "feature": "차분하고 부드러움",
+    "status": "아르젠트 크레들 졸업반 교사",
+    "opinion": "어린 시절 굶주림을 못 이겨 빵을 훔치다 적발된 쌍둥이 누나 프라바타가, 그 벌로 발테리온 아레나로 끌려가며 강제로 이별하게 되었다. 이에 니샤는 마음 깊이 칼날을 품고, 조용히 아르젠트 크래들을 무너뜨릴 계획을 세우며 프라바타의 행방을 추적하고자 한다.",
+    "avatarType": "dragon",
+    "image": "nisha/nisha_01.png",
+    "gallery": [
+      "nisha/nisha_01.png",
+      "nisha/nisha_02.png",
+      "nisha/nisha_03.png",
+      "nisha/nisha_04.png"
+    ],
+    "statusMsg": "STATUS RED // TARGET WANTED"
+  },
+  {
+    "id": "4",
+    "code": "영문이름",
+    "tabName": "이름 (name)",
     "name": "{이름}",
     "race": "{종족}",
     "dept": "{관리부서}",

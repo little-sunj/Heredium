@@ -753,11 +753,6 @@ body {
     filter: drop-shadow(0 0 10px var(--color-primary));
 }
 
-#specimen-1 .holo-avatar-mesh {
-    color: var(--color-secondary);
-    filter: drop-shadow(0 0 10px var(--color-secondary));
-}
-
 .holo-svg {
     width: 100%;
     height: 100%;
@@ -770,25 +765,8 @@ body {
     object-fit: contain;
     z-index: 3;
     opacity: 0.9;
-    filter: drop-shadow(0 0 15px var(--color-secondary));
-    animation: holoImgPulse 3s infinite ease-in-out alternate;
-}
-
-#specimen-2 .holo-avatar-img,
-#specimen-3 .holo-avatar-img {
     filter: drop-shadow(0 0 15px var(--color-primary));
-    animation-name: holoImgPulseRed;
-}
-
-@keyframes holoImgPulse {
-    0% {
-        opacity: 0.8;
-        filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.4)) brightness(0.95);
-    }
-    100% {
-        opacity: 0.95;
-        filter: drop-shadow(0 0 22px rgba(0, 240, 255, 0.7)) brightness(1.05);
-    }
+    animation: holoImgPulseRed 3s infinite ease-in-out alternate;
 }
 
 @keyframes holoImgPulseRed {
@@ -813,17 +791,8 @@ body {
     background: linear-gradient(90deg, transparent, currentColor, transparent);
     top: 0;
     left: 0;
+    color: var(--color-primary);
     animation: holoScan 4s infinite linear;
-}
-
-#specimen-1 .holo-scanner {
-    color: var(--color-secondary);
-}
-#specimen-2 .holo-scanner {
-    color: var(--color-primary);
-}
-#specimen-3 .holo-scanner {
-    color: var(--color-primary);
 }
 
 .holo-status {
@@ -862,10 +831,6 @@ body {
     letter-spacing: 1px;
     display: block;
     margin-bottom: 5px;
-}
-
-#specimen-1 .specimen-number {
-    color: var(--color-secondary);
 }
 
 .specimen-name {
@@ -922,10 +887,6 @@ body {
     background: rgba(0, 0, 0, 0.2);
     border-left: 3px solid var(--color-primary);
     padding: 20px;
-}
-
-#specimen-1 .specimen-summary {
-    border-left-color: var(--color-secondary);
 }
 
 .specimen-summary h4 {
