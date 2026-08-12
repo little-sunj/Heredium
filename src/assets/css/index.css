@@ -662,10 +662,11 @@ body {
 
 /* 9. 개체 아카이브(Specimen Archives) 스타일 */
 .specimen-tabs {
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 15px;
-    margin-bottom: 40px;
+    max-width: 900px;
+    margin: 0 auto 40px auto;
 }
 
 .tab-btn {
@@ -675,11 +676,19 @@ body {
     font-family: var(--font-body);
     font-weight: 500;
     font-size: 0.85rem;
-    padding: 12px 24px;
+    padding: 10px 15px;
     cursor: pointer;
     transition: var(--transition-fast);
     border-radius: 2px;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
+    width: 100%;
+    min-height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    word-break: keep-all;
 }
 
 .tab-btn:hover {
@@ -1273,8 +1282,9 @@ body {
         flex-grow: 0;
     }
 
-    /* 모바일 기기에서의 개체 선택 탭 세로 정렬 및 터치 여백 최적화 */
+    /* 모바일 기기에서의 개체 선택 탭 세로 일렬(한 행에 하나씩) 배치 */
     .specimen-tabs {
+        display: flex;
         flex-direction: column;
         width: 100%;
         gap: 10px;
@@ -1283,10 +1293,11 @@ body {
 
     .tab-btn {
         width: 100%;
-        max-width: 340px; /* 모바일에서 과도하게 넓어지지 않도록 한계 부여 */
+        max-width: 340px;
         text-align: center;
         padding: 12px 18px;
         font-size: 0.8rem;
+        min-height: 52px;
     }
     
     .specimen-header {
