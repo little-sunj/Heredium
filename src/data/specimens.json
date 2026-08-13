@@ -149,11 +149,11 @@
     "condition": "{신체 조건}",
     "feature": "{특징}",
     "status": "{신분}",
-    "opinion": "{종합 의견}",
-    "avatarType": "dragon",
+    "opinion": "{캐릭터 설명}",
+    "avatarType": "{종족 대분류}",
     "image": "",
     "gallery": [],
-    "statusMsg": "STATUS RED // TARGET WANTED",
+    "statusMsg": "{캐릭터 대표 대사}",
     "author": "미정",
     "characterLink": "#"
   }
