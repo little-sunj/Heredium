@@ -26,9 +26,9 @@
   },
   {
     "id": "2",
-    "code": "영문이름",
-    "tabName": "이름 (name)",
-    "name": "{이름}",
+    "code": "EDRIAN",
+    "tabName": "애드리안 (EDRIAN)",
+    "name": "애드리안 (EDRIAN)",
     "race": "{종족}",
     "dept": "{관리부서}",
     "condition": "{신체 조건}",
@@ -36,8 +36,14 @@
     "status": "{신분}",
     "opinion": "{종합 의견}",
     "avatarType": "dragon",
-    "image": "",
-    "gallery": [],
+    "image": "edrian/edrian_01.png",
+    "gallery": [
+      "edrian/edrian_01.png",
+      "edrian/edrian_02.png",
+      "edrian/edrian_03.png",
+      "edrian/edrian_04.png",
+      "edrian/edrian_05.png"
+    ],
     "statusMsg": "STATUS RED // TARGET WANTED",
     "author": "미정",
     "characterLink": "#"
