@@ -434,6 +434,110 @@ function initCarouselLogic() {
         }
     });
     
+    // 터치 및 마우스 드래그 이벤트 구현 (모바일 스와이프 기능 대응)
+    let isDragging = false;
+    let startX = 0;
+    let dragDistance = 0;
+    let wasMoved = false;
+    
+    function getPositionX(event) {
+        return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+    }
+    
+    function dragStart(event) {
+        isDragging = true;
+        wasMoved = false;
+        startX = getPositionX(event);
+        track.style.transition = 'none';
+        dragDistance = 0;
+    }
+    
+    function dragMove(event) {
+        if (!isDragging) return;
+        
+        const currentX = getPositionX(event);
+        dragDistance = currentX - startX;
+        
+        if (Math.abs(dragDistance) > 10) {
+            wasMoved = true;
+            // 드래그 중 스크롤 등의 브라우저 기본 동작 방지
+            if (event.cancelable) {
+                event.preventDefault();
+            }
+        }
+        
+        const itemsPerPage = getItemsPerPage();
+        const itemWidth = items[0].getBoundingClientRect().width;
+        const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
+        const baseShift = currentIndex * (itemWidth + gap);
+        
+        const currentShift = -baseShift + dragDistance;
+        
+        // 경계선 저항 처리
+        const maxIndex = Math.max(0, totalItems - itemsPerPage);
+        const maxShift = -maxIndex * (itemWidth + gap);
+        
+        let finalShift = currentShift;
+        if (currentShift > 0) {
+            finalShift = currentShift * 0.3; // 첫 번째 아이템 왼쪽 저항
+        } else if (currentShift < maxShift) {
+            finalShift = maxShift + (currentShift - maxShift) * 0.3; // 마지막 아이템 오른쪽 저항
+        }
+        
+        track.style.transform = `translateX(${finalShift}px)`;
+    }
+    
+    function dragEnd() {
+        if (!isDragging) return;
+        isDragging = false;
+        
+        // 트랜지션 복원
+        track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        
+        const itemsPerPage = getItemsPerPage();
+        const itemWidth = items[0].getBoundingClientRect().width;
+        const gap = parseFloat(window.getComputedStyle(track).gap) || 0;
+        const maxIndex = Math.max(0, totalItems - itemsPerPage);
+        
+        const threshold = itemWidth * 0.15;
+        
+        if (dragDistance < -threshold) {
+            // 왼쪽으로 쓸어넘김 -> 다음
+            if (currentIndex < maxIndex) {
+                currentIndex++;
+            }
+        } else if (dragDistance > threshold) {
+            // 오른쪽으로 쓸어넘김 -> 이전
+            if (currentIndex > 0) {
+                currentIndex--;
+            }
+        }
+        
+        updateCarousel();
+        
+        // 드래그가 실제로 일어났다면 클릭 이벤트 전파를 1회 막아서 라이트박스 모달이 안 뜨도록 처리
+        if (wasMoved) {
+            const preventClick = (e) => {
+                e.stopImmediatePropagation();
+                e.preventDefault();
+            };
+            track.addEventListener('click', preventClick, true);
+            setTimeout(() => {
+                track.removeEventListener('click', preventClick, true);
+            }, 50);
+        }
+    }
+    
+    // 이벤트 리스너 등록
+    track.addEventListener('touchstart', dragStart, { passive: true });
+    track.addEventListener('touchend', dragEnd);
+    track.addEventListener('touchmove', dragMove, { passive: false });
+    
+    track.addEventListener('mousedown', dragStart);
+    track.addEventListener('mouseup', dragEnd);
+    track.addEventListener('mouseleave', dragEnd);
+    track.addEventListener('mousemove', dragMove);
+    
     // 윈도우 크기 변환 시 위치 자동 조정 (디바운싱 적용으로 성능 최적화)
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);
