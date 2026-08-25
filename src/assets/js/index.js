@@ -214,6 +214,11 @@ function renderSpecimens(specimens) {
             `;
         }
 
+        // 이름에서 한글명과 영문명 분리 (예: "이름 (영문)" -> "이름", "영문")
+        const nameMatch = specimen.name.match(/^([^\(]+)(?:\(([^\)]+)\))?$/);
+        const koName = nameMatch ? nameMatch[1].trim() : specimen.name;
+        const enName = (nameMatch && nameMatch[2]) ? nameMatch[2].trim() : "";
+
         // 상세 프로필 추가
         const profileHTML = `
             <div class="specimen-profile ${activeClass}" id="specimen-${specimen.id}">
@@ -229,7 +234,10 @@ function renderSpecimens(specimens) {
                         <div class="specimen-header">
                             <div class="header-left">
                                 <span class="specimen-number">${specimen.code}</span>
-                                <h3 class="specimen-name">${specimen.name}</h3>
+                                <h3 class="specimen-name">
+                                    <span class="name-ko">${koName}</span>
+                                    ${enName ? `<span class="name-en">${enName}</span>` : ''}
+                                </h3>
                                 <span class="specimen-race">종족 : ${specimen.race}</span>
                             </div>
                             <div class="header-right">

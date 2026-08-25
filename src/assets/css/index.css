@@ -886,11 +886,27 @@ body {
 }
 
 .specimen-name {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.specimen-name .name-ko {
     font-family: var(--font-body);
     font-size: 2.2rem;
     font-weight: 900;
     color: var(--text-bright);
-    margin-bottom: 8px;
+    line-height: 1.2;
+}
+
+.specimen-name .name-en {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .specimen-race {
