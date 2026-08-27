@@ -29,13 +29,13 @@
     "code": "EDRIAN",
     "tabName": "애드리안 (EDRIAN)",
     "name": "애드리안 (EDRIAN)",
-    "race": "{종족}",
-    "dept": "{관리부서}",
-    "condition": "{신체 조건}",
-    "feature": "{특징}",
-    "status": "{신분}",
-    "opinion": "{종합 의견}",
-    "avatarType": "dragon",
+    "race": "인간",
+    "dept": "벨라로즈 쿼터",
+    "condition": "181cm / 베이지색 웨이브 헤어, 녹안",
+    "feature": "몰락귀족",
+    "status": "창부",
+    "opinion": "전분야 우성인자 보유중인 에르하르트 가문 출신.가문 구성원은 현재 각 지역으로 팔려나가 생사불명",
+    "avatarType": "huaman",
     "image": "edrian/edrian_01.png",
     "gallery": [
       "edrian/edrian_01.png",
@@ -44,9 +44,9 @@
       "edrian/edrian_04.png",
       "edrian/edrian_05.png"
     ],
-    "statusMsg": "STATUS RED // TARGET WANTED",
-    "author": "미정",
-    "characterLink": "#"
+    "statusMsg": "나를 위해 피어줘 나만의 장미.",
+    "author": "떯기",
+    "characterLink": "https://t.melting.chat/d7u6hy"
   },
   {
     "id": "3",
@@ -115,8 +115,8 @@
     "image": "",
     "gallery": [],
     "statusMsg": "STATUS RED // TARGET WANTED",
-    "author": "미정",
-    "characterLink": "#"
+    "author": "냠냠티비",
+    "characterLink": "https://t.melting.chat/w2xv124"
   },
   {
     "id": "6",
@@ -133,8 +133,8 @@
     "image": "",
     "gallery": [],
     "statusMsg": "STATUS RED // TARGET WANTED",
-    "author": "미정",
-    "characterLink": "#"
+    "author": "냠냠티비",
+    "characterLink": "https://t.melting.chat/y3sz3qw"
   },
   {
     "id": "7",
