@@ -60,13 +60,38 @@ function getAssetUrl(relativePath) {
     return new URL(`../images/${relativePath}`, import.meta.url).href;
 }
 
-// 1. BGM 플레이리스트 정의 (import.meta.glob를 사용하여 sound 폴더 내 모든 mp3 파일을 동적 로드)
+// 1. BGM 음원 및 앨범 커버 이미지 동적 로드 (파일명 기반 자동 매칭)
 const bgmFiles = import.meta.glob('../sound/*.mp3', { eager: true });
-const BGM_PLAYLIST = Object.entries(bgmFiles).map(([path, module]) => {
-    const url = module.default;
+const coverFiles = import.meta.glob('../images/sound/*.{png,jpg,jpeg,webp}', { eager: true });
+
+// 파일 경로에서 확장자를 제외한 순수 파일명을 추출하는 헬퍼
+function getCleanBaseName(filePath) {
+    const filename = filePath.substring(filePath.lastIndexOf('/') + 1);
+    return filename.substring(0, filename.lastIndexOf('.'));
+}
+
+// 특수문자, 공백 등을 제거하여 안전하게 키를 매칭하는 정규화 함수
+function normalizeKey(str) {
+    return str.replace(/[^a-zA-Z0-9가-힣]/g, '').toLowerCase();
+}
+
+// 앨범 커버 이미지 맵 구성
+const coverMap = {};
+Object.entries(coverFiles).forEach(([imgPath, module]) => {
+    const baseName = getCleanBaseName(imgPath);
+    coverMap[normalizeKey(baseName)] = module.default || module;
+});
+
+// BGM 플레이리스트 생성 (음원과 커버 이미지 1:1 매칭)
+const BGM_PLAYLIST = Object.entries(bgmFiles).map(([soundPath, module]) => {
+    const soundUrl = module.default || module;
+    const baseName = getCleanBaseName(soundPath);
+    const coverUrl = coverMap[normalizeKey(baseName)] || "";
+
     return {
-        name: getTrackNameFromUrl(url),
-        url: url
+        name: baseName,
+        url: soundUrl,
+        coverUrl: coverUrl
     };
 });
 
@@ -672,6 +697,8 @@ function initBgmPlayer() {
     const modalPrevBtn = document.getElementById('modal-prev-btn');
     const modalNextBtn = document.getElementById('modal-next-btn');
     const modalPlaylist = document.getElementById('modal-playlist');
+    const modalCdCover = document.getElementById('modal-cd-cover');
+    const modalBackdrop = document.getElementById('music-modal-backdrop');
 
     if (!player || !playBtn || !trackName || !playlistDropdown) return;
 
@@ -685,9 +712,14 @@ function initBgmPlayer() {
     `).join('');
     playlistDropdown.innerHTML = dropdownHtml;
 
-    // 모달 내부 플레이리스트 목록 동적 생성
+    // 모달 내부 플레이리스트 목록 동적 생성 (앨범 커버 썸네일 포함)
     if (modalPlaylist) {
-        modalPlaylist.innerHTML = dropdownHtml;
+        modalPlaylist.innerHTML = BGM_PLAYLIST.map((track, i) => `
+            <li data-index="${i}" class="${i === 0 ? 'active' : ''}">
+                ${track.coverUrl ? `<img src="${track.coverUrl}" class="modal-playlist-thumb" alt="" loading="lazy">` : '<span class="modal-playlist-thumb-placeholder">♪</span>'}
+                <span class="modal-playlist-title">${track.name}</span>
+            </li>
+        `).join('');
     }
 
     // 재생 상태 및 UI 통합 관리 함수
@@ -713,6 +745,28 @@ function initBgmPlayer() {
 
         if (modalTrackTitle) {
             modalTrackTitle.textContent = track.name;
+        }
+
+        // CD 앨범 커버 이미지 바인딩
+        if (modalCdCover) {
+            if (track.coverUrl) {
+                modalCdCover.style.backgroundImage = `url('${track.coverUrl}')`;
+                modalCdCover.classList.add('has-image');
+            } else {
+                modalCdCover.style.backgroundImage = '';
+                modalCdCover.classList.remove('has-image');
+            }
+        }
+
+        // 모달 앰비언트 블러 배경 바인딩
+        if (modalBackdrop) {
+            if (track.coverUrl) {
+                modalBackdrop.style.backgroundImage = `url('${track.coverUrl}')`;
+                modalBackdrop.classList.add('has-image');
+            } else {
+                modalBackdrop.style.backgroundImage = '';
+                modalBackdrop.classList.remove('has-image');
+            }
         }
 
         // 렌더링 후 가로 길이를 비교하여 텍스트가 잘리는 경우에만 marquee 활성화 클래스 부여
