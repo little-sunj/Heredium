@@ -27,6 +27,12 @@ export default defineConfig({
           if (assetInfo.name && soundExtensions.some(ext => assetInfo.name.toLowerCase().endsWith(ext))) {
             return 'assets/sound/[name]-[hash].[ext]';
           }
+
+          // 동영상 파일 형식 필터링 및 dist/assets/movie/ 폴더 분류
+          const movieExtensions = ['.mp4', '.webm', '.ogg', '.mov'];
+          if (assetInfo.name && movieExtensions.some(ext => assetInfo.name.toLowerCase().endsWith(ext))) {
+            return 'assets/movie/[name]-[hash].[ext]';
+          }
           
           // 기타 리소스
           return 'assets/[name]-[hash].[ext]';
