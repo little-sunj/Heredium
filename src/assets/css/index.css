@@ -177,6 +177,22 @@ body {
     text-align: center;
     padding: 40px 20px;
     overflow: hidden;
+    background-color: var(--bg-darker);
+}
+
+/* 모바일 브라우저(iOS Safari 등)의 비디오 기본 재생 버튼 및 컨트롤 UI 강제 숨김 */
+video::-webkit-media-controls,
+video::-webkit-media-controls-start-playback-button,
+video::-webkit-media-controls-play-button,
+video::-webkit-media-controls-panel,
+video::-webkit-media-controls-overlay-play-button {
+    display: none !important;
+    -webkit-appearance: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
 }
 
 /* 비디오 백그라운드 레이어 */
@@ -205,6 +221,10 @@ body {
     flex-shrink: 0;
     object-fit: cover;
     filter: blur(1px) brightness(0.8);
+    opacity: 0; /* 로딩 중이거나 재생 시작 전까지 검은 배경 유지 */
+    transition: opacity 0.8s ease-in-out;
+    background-color: var(--bg-darker);
+    pointer-events: none;
     /* 가로가 길어졌을 때 양 옆이 검은색 배경에 자연스럽게 녹아들도록 부드러운 그라데이션 마스크 적용 */
     -webkit-mask-image: linear-gradient(
         to right,
@@ -224,6 +244,11 @@ body {
         rgba(0, 0, 0, 0.2) 94%,
         transparent 100%
     );
+}
+
+/* 비디오가 실제로 재생 시작되었을 때 부드럽게 페이드인 */
+.hero-video-bg video.is-playing {
+    opacity: 1;
 }
 
 .hero-video-bg iframe {

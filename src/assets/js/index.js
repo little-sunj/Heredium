@@ -103,6 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
         renderSpecimens(specimensData);
 
         // 동적 렌더링 이후 인터랙션 요소들 활성화
+        initHeroVideo();
         initScrollObserver();
         initEmblemGlitch();
         initBgmPlayer();
@@ -117,6 +118,69 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 });
+
+// 히어로 섹션 배경 비디오 제어 (로딩 전/저전력 모드 시 검은 배경 유지 및 재생 시 페이드인)
+function initHeroVideo() {
+    const video = document.querySelector('.hero-video-bg video');
+    if (!video) return;
+
+    // 모바일 브라우저(특히 iOS Safari)의 무음 자동재생 및 인라인 재생 정책 보장
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+
+    const markAsPlaying = () => {
+        if (!video.classList.contains('is-playing')) {
+            video.classList.add('is-playing');
+        }
+    };
+
+    // 이미 재생 중인 경우 (브라우저 캐시 등으로 즉시 구동된 경우)
+    if (!video.paused && video.currentTime > 0) {
+        markAsPlaying();
+    }
+
+    // 재생 시작 이벤트
+    video.addEventListener('playing', markAsPlaying);
+
+    // timeupdate: 실제 재생 시간이 진행되었을 때 확실하게 클래스 추가
+    video.addEventListener('timeupdate', () => {
+        if (video.currentTime > 0) {
+            markAsPlaying();
+        }
+    });
+
+    // 비디오 로딩 에러 시 검은 배경 상태 유지
+    video.addEventListener('error', () => {
+        video.classList.remove('is-playing');
+    });
+
+    // 자동 재생 시도 및 저전력 모드/정책 차단 대응
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+        playPromise.then(() => {
+            // 자동 재생 성공
+        }).catch(() => {
+            // 저전력 모드 등으로 자동 재생이 차단된 경우:
+            // 비디오를 계속 투명하게(검은 배경) 유지하고,
+            // 사용자의 첫 터치/클릭/스크롤 시 재생
+            const playOnUserInteraction = () => {
+                video.play().then(() => {
+                    markAsPlaying();
+                }).catch(() => {});
+                window.removeEventListener('touchstart', playOnUserInteraction);
+                window.removeEventListener('click', playOnUserInteraction);
+                window.removeEventListener('scroll', playOnUserInteraction);
+            };
+
+            window.addEventListener('touchstart', playOnUserInteraction, { once: true, passive: true });
+            window.addEventListener('click', playOnUserInteraction, { once: true, passive: true });
+            window.addEventListener('scroll', playOnUserInteraction, { once: true, passive: true });
+        });
+    }
+}
 
 // 2. 8대 부서(Sectors) 카드 동적 렌더링 및 모달 바인딩
 function renderSectors(sectors) {
