@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// 히어로 섹션 배경 비디오 제어 (로딩 전/저전력 모드 시 검은 배경 유지 및 재생 시 페이드인)
+// 히어로 섹션 배경 비디오 제어 (iOS Safari 호환성 및 저전력 모드 대응)
 function initHeroVideo() {
     const video = document.querySelector('.hero-video-bg video');
     if (!video) return;
@@ -148,6 +148,7 @@ function initHeroVideo() {
     video.muted = true;
     video.defaultMuted = true;
     video.playsInline = true;
+    video.setAttribute('muted', '');
     video.setAttribute('playsinline', '');
     video.setAttribute('webkit-playsinline', '');
 
@@ -157,49 +158,51 @@ function initHeroVideo() {
         }
     };
 
-    // 이미 재생 중인 경우 (브라우저 캐시 등으로 즉시 구동된 경우)
+    // 이미 재생 중이거나 데이터가 로드된 경우
     if (!video.paused && video.currentTime > 0) {
         markAsPlaying();
     }
 
-    // 재생 시작 이벤트
+    // 재생 및 로드 이벤트 다중 바인딩 (iOS Safari 이벤트 누락 방어)
     video.addEventListener('playing', markAsPlaying);
-
-    // timeupdate: 실제 재생 시간이 진행되었을 때 확실하게 클래스 추가
+    video.addEventListener('canplay', markAsPlaying);
+    video.addEventListener('loadeddata', markAsPlaying);
     video.addEventListener('timeupdate', () => {
         if (video.currentTime > 0) {
             markAsPlaying();
         }
     });
 
-    // 비디오 로딩 에러 시 검은 배경 상태 유지
-    video.addEventListener('error', () => {
-        video.classList.remove('is-playing');
+    video.addEventListener('error', (e) => {
+        console.warn("Hero Video Load/Play Warning:", video.error);
     });
 
-    // 자동 재생 시도 및 저전력 모드/정책 차단 대응
-    const playPromise = video.play();
-    if (playPromise !== undefined) {
-        playPromise.then(() => {
-            // 자동 재생 성공
-        }).catch(() => {
-            // 저전력 모드 등으로 자동 재생이 차단된 경우:
-            // 비디오를 계속 투명하게(검은 배경) 유지하고,
-            // 사용자의 첫 터치/클릭/스크롤 시 재생
-            const playOnUserInteraction = () => {
-                video.play().then(() => {
-                    markAsPlaying();
-                }).catch(() => {});
-                window.removeEventListener('touchstart', playOnUserInteraction);
-                window.removeEventListener('click', playOnUserInteraction);
-                window.removeEventListener('scroll', playOnUserInteraction);
-            };
+    // 자동 재생 시도
+    const startPlay = () => {
+        video.muted = true;
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                markAsPlaying();
+            }).catch(err => {
+                console.log("▲ 비디오 자동재생 대기 (iOS 저전력 모드 등): 사용자 터치 시 재생됩니다.");
+            });
+        }
+    };
 
-            window.addEventListener('touchstart', playOnUserInteraction, { once: true, passive: true });
-            window.addEventListener('click', playOnUserInteraction, { once: true, passive: true });
-            window.addEventListener('scroll', playOnUserInteraction, { once: true, passive: true });
-        });
-    }
+    startPlay();
+
+    // 저전력 모드나 정책 차단 시 첫 화면 터치/클릭으로 즉시 구동 보장
+    const playOnUserInteraction = () => {
+        startPlay();
+        window.removeEventListener('touchstart', playOnUserInteraction);
+        window.removeEventListener('touchend', playOnUserInteraction);
+        window.removeEventListener('click', playOnUserInteraction);
+    };
+
+    window.addEventListener('touchstart', playOnUserInteraction, { once: true, passive: true });
+    window.addEventListener('touchend', playOnUserInteraction, { once: true, passive: true });
+    window.addEventListener('click', playOnUserInteraction, { once: true, passive: true });
 }
 
 // 2. 8대 부서(Sectors) 카드 동적 렌더링 및 모달 바인딩
@@ -921,14 +924,22 @@ function initBgmPlayer() {
             });
         }
 
-        // 비디오 재생 보장
+        // 비디오 재생 보장 (iOS Safari 터치 제스처 즉각 연동)
         const heroVideo = document.querySelector('.hero-video-bg video');
-        if (heroVideo && heroVideo.paused) {
+        if (heroVideo) {
+            heroVideo.muted = true;
+            heroVideo.defaultMuted = true;
+            heroVideo.playsInline = true;
+            heroVideo.setAttribute('muted', '');
+            heroVideo.setAttribute('playsinline', '');
+            heroVideo.setAttribute('webkit-playsinline', '');
+            heroVideo.classList.add('is-playing');
+
             heroVideo.play().then(() => {
-                if (!heroVideo.classList.contains('is-playing')) {
-                    heroVideo.classList.add('is-playing');
-                }
-            }).catch(() => {});
+                heroVideo.classList.add('is-playing');
+            }).catch(err => {
+                console.log("▲ 인트로 해금 후 비디오 재생:", err);
+            });
         }
     }
 

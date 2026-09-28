@@ -1329,8 +1329,11 @@ video::-webkit-media-controls-overlay-play-button {
         height: 100%;
         aspect-ratio: auto;
         object-fit: cover;
-        -webkit-mask-image: none;
-        mask-image: none;
+        -webkit-mask-image: none !important;
+        mask-image: none !important;
+        filter: none !important;
+        -webkit-filter: none !important;
+        opacity: 1 !important; /* 모바일에서 opacity 숨김으로 인한 검은화면 원천 방지 */
     }
 
     .section {
