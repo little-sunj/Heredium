@@ -54,6 +54,25 @@ function getTrackNameFromUrl(url) {
     }
 }
 
+// 모바일 기기 감지 (iOS, iPadOS, Android)
+const isMobileDevice = () => /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+// 시스템 안내 토스트 알림 헬퍼 함수
+let systemToastTimer = null;
+function showSystemToast(message, duration = 3000) {
+    const toast = document.getElementById('system-toast');
+    const msgEl = document.getElementById('toast-message');
+    if (!toast || !msgEl) return;
+
+    msgEl.textContent = message;
+    toast.classList.add('show');
+
+    if (systemToastTimer) clearTimeout(systemToastTimer);
+    systemToastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+    }, duration);
+}
+
 // JSON 내부의 이미지 경로를 Vite 번들러가 추적 가능하도록 URL을 생성해주는 동적 헬퍼 함수
 function getAssetUrl(relativePath) {
     if (!relativePath) return "";
@@ -109,6 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
         initBgmPlayer();
         initGnbToggle();
         initGalleryModal();
+        initMobileFloatingNav();
 
     } catch (error) {
         console.error("System Initialization Failed:", error);
@@ -331,7 +351,7 @@ function renderSpecimens(specimens) {
                             </div>
                             <div class="header-right">
                                 ${specimen.author ? `<div class="specimen-author">BY. <span class="author-name">${specimen.author}</span></div>` : ''}
-                                ${specimen.characterLink ? `<a href="${specimen.characterLink}" target="_blank" rel="noopener noreferrer" class="char-link-btn">CHARACTER LINK ➜</a>` : ''}
+                                ${specimen.characterLink ? `<a href="${specimen.characterLink}" target="${isMobileDevice() ? '_self' : '_blank'}" rel="noopener noreferrer" class="char-link-btn" data-char="${koName}">CHARACTER LINK ➜</a>` : ''}
                             </div>
                         </div>
                         <div class="specimen-stats">
@@ -370,6 +390,15 @@ function renderSpecimens(specimens) {
             
             // 갤러리 업데이트
             updateGallery(tabId);
+        });
+    });
+
+    // 모바일 환경에서 외부 캐릭터 링크 이동 시 안내 토스트 팝업
+    displayContainer.querySelectorAll('.char-link-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (isMobileDevice()) {
+                showSystemToast("외부 서비스로 이동합니다. 아이폰 이용자는 화면을 오른쪽으로 밀어(◀) 돌아오세요.", 3000);
+            }
         });
     });
 
@@ -858,11 +887,47 @@ function initBgmPlayer() {
 
     loadTrack(0);
 
-    // [자동 재생 대응 로직]
-    // 1. 즉각적인 자동 재생 시도
-    attemptAutoplay();
+    // [시스템 진입 인트로 오버레이 연동 (모바일 오디오 정책 해금 & BGM/영상 즉시 시작)]
+    const introOverlay = document.getElementById('system-intro');
+    const introEnterBtn = document.getElementById('intro-enter-btn');
 
-    // 2. 브라우저 보안 정책에 의해 막힐 시를 대비해 화면 첫 클릭 시 강제 가동
+    function dismissIntroAndStart() {
+        if (!introOverlay || introOverlay.classList.contains('is-dismissed')) return;
+        introOverlay.classList.add('is-dismissed');
+
+        // BGM 재생 즉시 시도 (유저 제스처로 모바일 브라우저 정책 통과)
+        if (audio.paused) {
+            audio.play().then(() => {
+                setPlayState(true);
+                document.removeEventListener('click', triggerPlayOnFirstClick);
+            }).catch(err => {
+                console.log("▲ 오디오 재생 대기:", err);
+            });
+        }
+
+        // 비디오 재생 보장
+        const heroVideo = document.querySelector('.hero-video-bg video');
+        if (heroVideo && heroVideo.paused) {
+            heroVideo.play().then(() => {
+                if (!heroVideo.classList.contains('is-playing')) {
+                    heroVideo.classList.add('is-playing');
+                }
+            }).catch(() => {});
+        }
+    }
+
+    if (introOverlay) {
+        introOverlay.addEventListener('click', dismissIntroAndStart);
+    }
+    if (introEnterBtn) {
+        introEnterBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dismissIntroAndStart();
+        });
+    }
+
+    // [기존 자동 재생 대응 로직 (보조 백업)]
+    attemptAutoplay();
     document.addEventListener('click', triggerPlayOnFirstClick, { once: true });
 
     function attemptAutoplay() {
@@ -1028,5 +1093,22 @@ function initGnbToggle() {
             toggleBtn.classList.remove('active');
             gnbLinks.classList.remove('active');
         });
+    });
+}
+
+// 8. 모바일 플로팅 내비게이션 (뒤로가기 / 인앱 브라우저 복귀 지원)
+function initMobileFloatingNav() {
+    const backBtn = document.getElementById('floating-back-btn');
+    if (!backBtn) return;
+
+    backBtn.addEventListener('click', () => {
+        // 이전 방문 히스토리가 존재하는 경우
+        if (window.history.length > 1) {
+            window.history.back();
+        } else {
+            // 외부 앱에서 바로 이 페이지로 접속하여 뒤로 갈 히스토리가 없는 경우
+            showSystemToast("이전 페이지가 없습니다. 앱 복귀는 화면 상단 좌측 ◀ 버튼이나 창을 닫아주세요.", 3500);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     });
 }

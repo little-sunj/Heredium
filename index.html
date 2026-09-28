@@ -88,7 +88,7 @@
     <header class="hero-section">
         <!-- 메인 배경 비디오 -->
         <div class="hero-video-bg">
-            <video autoplay muted loop playsinline webkit-playsinline disablepictureinpicture disableremoteplayback preload="auto" onplaying="this.classList.add('is-playing')">
+            <video autoplay muted loop playsinline webkit-playsinline disablepictureinpicture disableremoteplayback preload="metadata" onplaying="this.classList.add('is-playing')">
                 <source src="src/assets/movie/heredium_movie.mp4" type="video/mp4">
             </video>
         </div>
@@ -348,6 +348,54 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- 시스템 진입 인트로 오버레이 (모바일 BGM 정책 대응 및 몰입형 접속 인터랙션) -->
+    <div class="system-intro-overlay" id="system-intro">
+        <div class="intro-backdrop"></div>
+        <div class="intro-scanlines"></div>
+        <div class="intro-panel glass-panel">
+            <div class="intro-emblem">
+                <svg viewBox="0 0 100 100" class="emblem-svg">
+                    <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <polygon points="50,15 80,75 20,75" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <line x1="50" y1="15" x2="50" y2="75" stroke="currentColor" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="10" fill="currentColor"/>
+                </svg>
+            </div>
+            <span class="intro-tag">// SYSTEM_SECURITY_CLEARANCE</span>
+            <h2 class="intro-title">HEREDIUM</h2>
+            <p class="intro-desc">제국 우생학 선별 관리국 기록 보관소</p>
+            <div class="intro-divider"></div>
+            <button class="intro-enter-btn" id="intro-enter-btn">
+                <span class="btn-pulse-glow"></span>
+                <svg viewBox="0 0 24 24" class="btn-audio-icon" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                </svg>
+                <span>ACCESS ARCHIVE (BGM ON)</span>
+            </button>
+            <p class="intro-hint">화면 어디든 탭하여 시스템을 활성화하십시오</p>
+        </div>
+    </div>
+
+    <!-- 모바일 플로팅 내비게이션 (뒤로가기 / 인앱 브라우저 복귀 지원) -->
+    <aside class="mobile-floating-nav" id="mobile-floating-nav" aria-label="모바일 네비게이션">
+        <button class="floating-back-btn" id="floating-back-btn" aria-label="이전 화면으로 돌아가기" title="이전 화면으로 돌아가기">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            <span class="floating-btn-text">BACK</span>
+        </button>
+    </aside>
+
+    <!-- 시스템 안내 토스트 알림 -->
+    <div class="system-toast" id="system-toast" role="alert" aria-live="polite">
+        <div class="toast-content">
+            <span class="toast-icon">ℹ</span>
+            <span class="toast-message" id="toast-message">시스템 알림</span>
         </div>
     </div>
 
