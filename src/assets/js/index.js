@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// 히어로 섹션 배경 비디오 제어 (iOS Safari 호환성 및 저전력 모드 대응)
+// 히어로 섹션 배경 비디오 제어 (iOS Safari 호환성, 인라인 강제 및 전체화면 탈취 방지)
 function initHeroVideo() {
     const video = document.querySelector('.hero-video-bg video');
     if (!video) return;
@@ -149,8 +149,19 @@ function initHeroVideo() {
     video.defaultMuted = true;
     video.playsInline = true;
     video.setAttribute('muted', '');
-    video.setAttribute('playsinline', '');
-    video.setAttribute('webkit-playsinline', '');
+    video.setAttribute('playsinline', 'true');
+    video.setAttribute('webkit-playsinline', 'true');
+    video.setAttribute('x5-playsinline', 'true');
+
+    // [핵심] iOS Safari 네이티브 전체화면 플레이어로 튀어나가는 현상 원천 차단
+    const preventFullscreen = (e) => {
+        if (e && typeof e.preventDefault === 'function') e.preventDefault();
+        if (typeof video.webkitExitFullscreen === 'function' && video.webkitDisplayingFullscreen) {
+            video.webkitExitFullscreen();
+        }
+    };
+    video.addEventListener('webkitbeginfullscreen', preventFullscreen);
+    video.addEventListener('webkitfullscreenchange', preventFullscreen);
 
     const markAsPlaying = () => {
         if (!video.classList.contains('is-playing')) {
@@ -177,32 +188,33 @@ function initHeroVideo() {
         console.warn("Hero Video Load/Play Warning:", video.error);
     });
 
-    // 자동 재생 시도
+    // 안전한 인라인 재생 시도 함수
     const startPlay = () => {
         video.muted = true;
+        video.defaultMuted = true;
+        video.playsInline = true;
         const playPromise = video.play();
         if (playPromise !== undefined) {
             playPromise.then(() => {
                 markAsPlaying();
             }).catch(err => {
-                console.log("▲ 비디오 자동재생 대기 (iOS 저전력 모드 등): 사용자 터치 시 재생됩니다.");
+                console.log("▲ 비디오 자동재생 대기 (iOS 정책 등): 사용자 상호작용 후 재생됩니다.");
             });
         }
     };
 
     startPlay();
 
-    // 저전력 모드나 정책 차단 시 첫 화면 터치/클릭으로 즉시 구동 보장
+    // 저전력 모드나 정책 차단 시 화면 터치/클릭으로 즉시 구동 보장
     const playOnUserInteraction = () => {
-        startPlay();
-        window.removeEventListener('touchstart', playOnUserInteraction);
-        window.removeEventListener('touchend', playOnUserInteraction);
-        window.removeEventListener('click', playOnUserInteraction);
+        if (video.paused) {
+            startPlay();
+        }
     };
 
-    window.addEventListener('touchstart', playOnUserInteraction, { once: true, passive: true });
-    window.addEventListener('touchend', playOnUserInteraction, { once: true, passive: true });
-    window.addEventListener('click', playOnUserInteraction, { once: true, passive: true });
+    window.addEventListener('touchstart', playOnUserInteraction, { passive: true });
+    window.addEventListener('touchend', playOnUserInteraction, { passive: true });
+    window.addEventListener('click', playOnUserInteraction, { passive: true });
 }
 
 // 2. 8대 부서(Sectors) 카드 동적 렌더링 및 모달 바인딩
