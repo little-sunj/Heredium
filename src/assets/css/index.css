@@ -928,13 +928,27 @@ video::-webkit-media-controls-overlay-play-button {
     border-radius: 4px;
     transition: all 0.3s ease;
     letter-spacing: 0.5px;
+    display: inline-block;
+    cursor: pointer;
 }
 
-.char-link-btn:hover {
+.char-link-btn:hover:not(.disabled):not(:disabled) {
     background: var(--color-primary);
     color: var(--bg-darker);
     box-shadow: var(--shadow-neon-red);
     border-color: var(--color-primary);
+}
+
+/* 준비 중(COMING SOON) 비활성화 버튼 스타일 */
+.char-link-btn.disabled,
+button.char-link-btn:disabled {
+    color: rgba(148, 163, 184, 0.5);
+    border: 1px dashed rgba(148, 163, 184, 0.3);
+    background: rgba(255, 255, 255, 0.02);
+    cursor: not-allowed;
+    pointer-events: none;
+    box-shadow: none;
+    user-select: none;
 }
 
 .specimen-number {
@@ -1322,6 +1336,7 @@ video::-webkit-media-controls-overlay-play-button {
 @media (max-width: 768px) {
     .hero-video-bg {
         align-items: center;
+        pointer-events: none !important;
     }
     .hero-video-bg video {
         top: auto;
@@ -1334,6 +1349,10 @@ video::-webkit-media-controls-overlay-play-button {
         filter: none !important;
         -webkit-filter: none !important;
         opacity: 1 !important; /* 모바일에서 opacity 숨김으로 인한 검은화면 원천 방지 */
+        pointer-events: none !important;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        -webkit-touch-callout: none !important;
     }
 
     .section {

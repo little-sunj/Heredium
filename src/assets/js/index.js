@@ -153,15 +153,12 @@ function initHeroVideo() {
     video.setAttribute('webkit-playsinline', 'true');
     video.setAttribute('x5-playsinline', 'true');
 
-    // [핵심] iOS Safari 네이티브 전체화면 플레이어로 튀어나가는 현상 원천 차단
-    const preventFullscreen = (e) => {
-        if (e && typeof e.preventDefault === 'function') e.preventDefault();
-        if (typeof video.webkitExitFullscreen === 'function' && video.webkitDisplayingFullscreen) {
-            video.webkitExitFullscreen();
-        }
-    };
-    video.addEventListener('webkitbeginfullscreen', preventFullscreen);
-    video.addEventListener('webkitfullscreenchange', preventFullscreen);
+    // [iOS 인앱 브라우저 대응]
+    // 아이폰의 앱 내장 웹뷰(WKWebView)는 앱 설정(allowsInlineMediaPlayback)에 따라 인라인 재생이 금지되어 있을 수 있고,
+    // 이 경우 playsinline 속성이 무시되어 '사용자 터치 안에서 호출된 play()'가 전부 네이티브 전체화면으로 열린다.
+    // (아이패드는 이 설정의 기본값이 허용이라 같은 앱에서도 정상 재생됨)
+    // 따라서 배경 영상의 play()는 절대 터치/클릭 핸들러 안에서 호출하지 않고,
+    // 제스처와 무관한 시점(로드, 페이지 복귀)에만 시도한다. 인라인이 금지된 환경에서는 조용히 실패하고 poster가 유지된다.
 
     const markAsPlaying = () => {
         if (!video.classList.contains('is-playing')) {
@@ -188,7 +185,7 @@ function initHeroVideo() {
         console.warn("Hero Video Load/Play Warning:", video.error);
     });
 
-    // 안전한 인라인 재생 시도 함수
+    // 안전한 인라인 재생 시도 함수 (로드 시 + 페이지 복귀 시에만 호출, 터치 핸들러에서는 호출 금지)
     const startPlay = () => {
         video.muted = true;
         video.defaultMuted = true;
@@ -198,23 +195,21 @@ function initHeroVideo() {
             playPromise.then(() => {
                 markAsPlaying();
             }).catch(err => {
-                console.log("▲ 비디오 자동재생 대기 (iOS 정책 등): 사용자 상호작용 후 재생됩니다.");
+                console.log("▲ 배경 비디오 인라인 재생 불가 (인앱 웹뷰/저전력 모드 등): poster 이미지로 대체 표시합니다.", err);
             });
         }
     };
 
     startPlay();
 
-    // 저전력 모드나 정책 차단 시 화면 터치/클릭으로 즉시 구동 보장
-    const playOnUserInteraction = () => {
-        if (video.paused) {
+    // 앱 전환·뒤로가기(bfcache) 복귀 시 iOS가 멈춘 영상을 이어서 재생 (터치 이벤트가 아니므로 전체화면 전환 없음)
+    const resumeIfPaused = () => {
+        if (document.visibilityState === 'visible' && video.paused) {
             startPlay();
         }
     };
-
-    window.addEventListener('touchstart', playOnUserInteraction, { passive: true });
-    window.addEventListener('touchend', playOnUserInteraction, { passive: true });
-    window.addEventListener('click', playOnUserInteraction, { passive: true });
+    document.addEventListener('visibilitychange', resumeIfPaused);
+    window.addEventListener('pageshow', resumeIfPaused);
 }
 
 // 2. 8대 부서(Sectors) 카드 동적 렌더링 및 모달 바인딩
@@ -343,6 +338,21 @@ function renderSpecimens(specimens) {
         const koName = nameMatch ? nameMatch[1].trim() : specimen.name;
         const enName = (nameMatch && nameMatch[2]) ? nameMatch[2].trim() : "";
 
+        // 캐릭터 링크 버튼 HTML 생성 (comming soon / coming soon 비활성화 처리)
+        let linkBtnHtml = '';
+        if (specimen.characterLink) {
+            const rawLink = specimen.characterLink.trim();
+            const lowerLink = rawLink.toLowerCase();
+            const isComingSoon = lowerLink === 'comming soon' || lowerLink === 'coming soon' || !/^https?:\/\//i.test(rawLink);
+
+            if (isComingSoon) {
+                linkBtnHtml = `<button type="button" class="char-link-btn disabled" disabled title="캐릭터 링크 준비 중입니다">COMMING SOON</button>`;
+            } else {
+                const target = isMobileDevice() ? '_self' : '_blank';
+                linkBtnHtml = `<a href="${rawLink}" target="${target}" rel="noopener noreferrer" class="char-link-btn" data-char="${koName}">CHARACTER LINK ➜</a>`;
+            }
+        }
+
         // 상세 프로필 추가
         const profileHTML = `
             <div class="specimen-profile ${activeClass}" id="specimen-${specimen.id}">
@@ -366,7 +376,7 @@ function renderSpecimens(specimens) {
                             </div>
                             <div class="header-right">
                                 ${specimen.author ? `<div class="specimen-author">BY. <span class="author-name">${specimen.author}</span></div>` : ''}
-                                ${specimen.characterLink ? `<a href="${specimen.characterLink}" target="${isMobileDevice() ? '_self' : '_blank'}" rel="noopener noreferrer" class="char-link-btn" data-char="${koName}">CHARACTER LINK ➜</a>` : ''}
+                                ${linkBtnHtml}
                             </div>
                         </div>
                         <div class="specimen-stats">
@@ -408,8 +418,8 @@ function renderSpecimens(specimens) {
         });
     });
 
-    // 모바일 환경에서 외부 캐릭터 링크 이동 시 안내 토스트 팝업
-    displayContainer.querySelectorAll('.char-link-btn').forEach(btn => {
+    // 모바일 환경에서 유효한 외부 캐릭터 링크 이동 시 안내 토스트 팝업
+    displayContainer.querySelectorAll('a.char-link-btn:not(.disabled)').forEach(btn => {
         btn.addEventListener('click', () => {
             if (isMobileDevice()) {
                 showSystemToast("외부 서비스로 이동합니다. 아이폰 이용자는 화면을 오른쪽으로 밀어(◀) 돌아오세요.", 3000);
@@ -936,23 +946,9 @@ function initBgmPlayer() {
             });
         }
 
-        // 비디오 재생 보장 (iOS Safari 터치 제스처 즉각 연동)
-        const heroVideo = document.querySelector('.hero-video-bg video');
-        if (heroVideo) {
-            heroVideo.muted = true;
-            heroVideo.defaultMuted = true;
-            heroVideo.playsInline = true;
-            heroVideo.setAttribute('muted', '');
-            heroVideo.setAttribute('playsinline', '');
-            heroVideo.setAttribute('webkit-playsinline', '');
-            heroVideo.classList.add('is-playing');
-
-            heroVideo.play().then(() => {
-                heroVideo.classList.add('is-playing');
-            }).catch(err => {
-                console.log("▲ 인트로 해금 후 비디오 재생:", err);
-            });
-        }
+        // 배경 비디오는 여기서 play()하지 않는다.
+        // 터치 핸들러 안의 video.play()는 iOS 인앱 브라우저에서 네이티브 전체화면을 띄우는 직접 원인이다.
+        // (영상 재생은 initHeroVideo의 autoplay / 페이지 복귀 재시도가 담당)
     }
 
     if (introOverlay) {
