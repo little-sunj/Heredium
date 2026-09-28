@@ -828,6 +828,18 @@ function initBgmPlayer() {
         }
     }
 
+    // 오디오 자체 이벤트와 UI 동기화
+    audio.addEventListener('play', () => setPlayState(true));
+    audio.addEventListener('playing', () => setPlayState(true));
+    audio.addEventListener('pause', () => setPlayState(false));
+    audio.addEventListener('waiting', () => {
+        if (modalTrackStatus) modalTrackStatus.textContent = 'BUFFERING';
+    });
+    audio.addEventListener('error', (e) => {
+        console.error("Audio Load Error:", e);
+        if (modalTrackStatus) modalTrackStatus.textContent = 'ERROR';
+    });
+
     // 초기 트랙 로드
     function loadTrack(index) {
         currentTrackIndex = index;
@@ -838,6 +850,10 @@ function initBgmPlayer() {
 
         if (modalTrackTitle) {
             modalTrackTitle.textContent = track.name;
+        }
+
+        if (modalTrackStatus) {
+            modalTrackStatus.textContent = audio.paused ? 'READY' : 'PLAYING';
         }
 
         // CD 앨범 커버 이미지 바인딩
